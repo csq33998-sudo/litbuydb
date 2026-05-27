@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LitBuy Categories  — Browse by Category</title>
+  <meta name="description" content="Browse LitBuy finds by category: shoes, hoodies, T-shirts, jackets, and more.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo"><img src="images/litbuy-logo.png" alt="LitBuy Spreadsheet" class="logo-mark" width="36" height="36"><span class="logo-name"><em>LitBuy</em> Spreadsheet</span></a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+      <nav class="site-nav" id="siteNav">
+        <a href="index.html">Home</a>
+        <a href="finds.html">Finds</a>
+        <a href="review.html">Resources</a>
+        <a href="categories.html" class="active">Categories</a>
+        <a href="index.html#faq">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page-hero">
+    <div class="container">
+      <h1>LitBuy Categories</h1>
+      <p>Browse finds by category  — shoes, hoodies, T-shirts, jackets, and more.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="category-grid" id="categoryGrid"></div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <p>&copy; 2026 LitBuy Spreadsheet Resource</p>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const grid = document.getElementById("categoryGrid");
+      if (grid) {
+        grid.innerHTML = (window.LITBUY_CATEGORIES || []).map(c => `
+          <a href="finds.html?category=${c.slug}" class="category-card">
+            <span class="category-icon">${c.icon}</span>
+            <span>${c.name}</span>
+            ${c.count ? `<span class="category-count">${c.count}</span>` : ""}
+          </a>`).join("");
+      }
+    });
+  </script>
+</body>
+</html>

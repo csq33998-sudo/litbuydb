@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LitBuy Finds  — Browse Best Products 2026</title>
+  <meta name="description" content="Browse LitBuy Finds with search, filters, and direct purchase links to LitBuy.com shopping agent.">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="finds">
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo"><img src="images/litbuy-logo.png" alt="LitBuy Spreadsheet" class="logo-mark" width="36" height="36"><span class="logo-name"><em>LitBuy</em> Spreadsheet</span></a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation"><span></span><span></span><span></span></button>
+      <nav class="site-nav" id="siteNav">
+        <a href="index.html">Home</a>
+        <a href="finds.html" class="active">Finds</a>
+        <a href="review.html">Resources</a>
+        <a href="categories.html">Categories</a>
+        <a href="index.html#faq">FAQ</a>
+      </nav>
+    </div>
+  </header>
+
+  <div class="page-hero">
+    <div class="container">
+      <h1>LitBuy Finds</h1>
+      <p>Browse curated products with search, filters, and direct LitBuy purchase links.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="finds-toolbar">
+        <input type="search" id="findsSearch" placeholder="Search products, brands..." aria-label="Search products">
+        <select id="findsCategory" aria-label="Filter by category">
+          <option value="">All Categories</option>
+          <option value="shoes">Shoes</option>
+          <option value="hoodies">Hoodies / Sweaters</option>
+          <option value="t-shirts">T-Shirts</option>
+          <option value="jackets">Jackets</option>
+          <option value="pants">Pants / Shorts</option>
+          <option value="headwear">Headwear</option>
+          <option value="accessories">Accessories</option>
+          <option value="jersey">Jersey</option>
+          <option value="electronics">Electronics</option>
+          <option value="other">Other Stuff</option>
+        </select>
+      </div>
+      <p class="finds-count" id="findsCount">0 products found</p>
+      <div class="products-grid" id="findsGrid"></div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-bottom">
+      <p>&copy; 2026 LitBuy Spreadsheet Resource · <a href="https://litbuy.com" target="_blank" rel="noopener noreferrer">LitBuy.com</a></p>
+    </div>
+  </footer>
+
+  <script src="js/config.js"></script>
+  <script src="js/products.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
