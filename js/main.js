@@ -13,6 +13,28 @@
     return cat ? cat.name : slug;
   }
 
+  function categoryHref(cat) {
+    return cat.url || "finds.html?category=" + cat.slug;
+  }
+
+  function categoryCardHtml(c) {
+    const href = categoryHref(c);
+    const external = href.startsWith("http");
+    const openExternal = external && cfg.openInNewTab !== false;
+    return `
+        <a href="${href}" class="category-card${external ? " category-card--external" : ""}"${openExternal ? ' target="_blank" rel="noopener noreferrer"' : ""}>
+          <span class="category-icon">${c.icon}</span>
+          <span class="category-name">${c.name}</span>
+          ${c.count ? `<span class="category-count">${c.count}</span>` : ""}
+        </a>`;
+  }
+
+  function renderCategoryGrid() {
+    const catGrid = document.getElementById("categoryGrid");
+    if (!catGrid) return;
+    catGrid.innerHTML = (window.LITBUY_CATEGORIES || []).map(categoryCardHtml).join("");
+  }
+
   function productCard(p) {
     const styles = p.styles ? ` [${p.styles} styles]` : "";
     const badge = p.badge
@@ -170,20 +192,6 @@
 
     renderProducts(document.getElementById("popularProducts"), (window.LITBUY_PRODUCTS || []).slice(0, 6));
 
-    const catGrid = document.getElementById("categoryGrid");
-    if (catGrid) {
-      catGrid.innerHTML = (window.LITBUY_CATEGORIES || [])
-        .map(
-          (c) => `
-        <a href="finds.html?category=${c.slug}" class="category-card">
-          <span class="category-icon">${c.icon}</span>
-          <span>${c.name}</span>
-          ${c.count ? `<span class="category-count">${c.count}</span>` : ""}
-        </a>`
-        )
-        .join("");
-    }
-
     const seoRoutes = document.getElementById("seoRoutes");
     if (seoRoutes) {
       seoRoutes.innerHTML = (window.LITBUY_SEO_ROUTES || [])
@@ -240,14 +248,23 @@
     update();
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
+  function boot() {
+    renderCategoryGrid();
     initNav();
     initSearch();
     initFaq();
     initHome();
     initFinds();
     initHeroCountUp();
-  });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+
+  renderCategoryGrid();
 
   window.LitBuySite = { buyUrl, renderProducts, productCard };
 })();

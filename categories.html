@@ -46,18 +46,5 @@
   <script src="js/config.js"></script>
   <script src="js/products.js"></script>
   <script src="js/main.js"></script>
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const grid = document.getElementById("categoryGrid");
-      if (grid) {
-        grid.innerHTML = (window.LITBUY_CATEGORIES || []).map(c => `
-          <a href="finds.html?category=${c.slug}" class="category-card">
-            <span class="category-icon">${c.icon}</span>
-            <span>${c.name}</span>
-            ${c.count ? `<span class="category-count">${c.count}</span>` : ""}
-          </a>`).join("");
-      }
-    });
-  </script>
 </body>
 </html>

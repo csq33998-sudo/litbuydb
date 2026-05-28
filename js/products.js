@@ -26,16 +26,16 @@ window.LITBUY_PRODUCTS = [
 ];
 
 window.LITBUY_CATEGORIES = [
-  { slug: "shoes", name: "Shoes", icon: "👟" },
-  { slug: "hoodies", name: "Hoodies / Sweaters", icon: "🧥" },
-  { slug: "t-shirts", name: "T-Shirts", icon: "👕" },
-  { slug: "jackets", name: "Jackets", icon: "🧥" },
-  { slug: "pants", name: "Pants / Shorts", icon: "👖" },
-  { slug: "headwear", name: "Headwear", icon: "🧢" },
-  { slug: "accessories", name: "Accessories", icon: "⌚", count: 19 },
-  { slug: "jersey", name: "Jersey", icon: "⚽" },
-  { slug: "electronics", name: "Electronics", icon: "📱" },
-  { slug: "other", name: "Other Stuff", icon: "✨" },
+  { slug: "shoes", name: "Shoes", icon: "👟", url: "https://streetstyle.maisonlooks.com/en/s/StreetStyle/c/shoes" },
+  { slug: "hoodies", name: "Hoodies / Sweaters", icon: "🧥", url: "https://streetstyle.maisonlooks.com/en/s/StreetStyle/c/tops" },
+  { slug: "t-shirts", name: "T-Shirts", icon: "👕", url: "https://streetstyle.maisonlooks.com/en/s/StreetStyle/c/t-shirts" },
+  { slug: "jackets", name: "Jackets", icon: "🧥", url: "https://streetstyle.maisonlooks.com/en/s/StreetStyle/c/jackets" },
+  { slug: "pants", name: "Pants / Shorts", icon: "👖", url: "https://streetstyle.maisonlooks.com/en/s/StreetStyle/c/bottoms" },
+  { slug: "headwear", name: "Headwear", icon: "🧢", url: "https://streetstyle.maisonlooks.com/en/s/StreetStyle/c/headwear" },
+  { slug: "accessories", name: "Accessories", icon: "⌚", count: 19, url: "https://streetstyle.maisonlooks.com/en/s/StreetStyle/c/accessories" },
+  { slug: "jersey", name: "Jersey", icon: "⚽", url: "https://streetstyle.maisonlooks.com/en/s/StreetStyle/c/tops" },
+  { slug: "electronics", name: "Electronics", icon: "📱", url: "https://streetstyle.maisonlooks.com/en/s/StreetStyle/c/electronics" },
+  { slug: "other", name: "Other Stuff", icon: "✨", url: "https://streetstyle.maisonlooks.com/en/s/StreetStyle/c/perfume" },
 ];
 
 window.LITBUY_BRANDS = [
