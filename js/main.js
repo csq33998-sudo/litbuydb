@@ -36,7 +36,7 @@
 
   function productImageHtml(product, fallbackIcon) {
     if (product.image) {
-      return `<img src="${product.image}" alt="${product.name}" loading="lazy" decoding="async">`;
+      return `<img src="${product.image}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="product-image-fallback" hidden>${fallbackIcon}</span>`;
     }
 
     return `<span class="product-image-fallback">${fallbackIcon}</span>`;
