@@ -4,6 +4,7 @@
   const cfg = window.SITE_CONFIG || {};
   const AFFILIATE = cfg.affiliate || "https://litbuy.com";
   const SEARCH_REDIRECT_URL = "https://streetstyle.maisonlooks.com/en/search?q=";
+  const BRAND_PRODUCTS_URL = "https://streetstyle.maisonlooks.com/en/products?brands=";
 
   function buyUrl(product) {
     return AFFILIATE + (product ? "?product=" + encodeURIComponent(product.name) : "");
@@ -221,7 +222,7 @@
     const brands = document.getElementById("brandRoutes");
     if (brands) {
       brands.innerHTML = (window.LITBUY_BRANDS || [])
-        .map((b) => `<a href="finds.html?q=${encodeURIComponent("LitBuy " + b)}" class="link-pill">${b} Finds</a>`)
+        .map((b) => `<a href="${BRAND_PRODUCTS_URL}${encodeURIComponent(b)}" class="link-pill" target="_blank" rel="noopener noreferrer">${b} Finds</a>`)
         .join("");
     }
   }
