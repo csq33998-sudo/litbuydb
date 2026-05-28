@@ -3,6 +3,7 @@
 
   const cfg = window.SITE_CONFIG || {};
   const AFFILIATE = cfg.affiliate || "https://litbuy.com";
+  const SEARCH_REDIRECT_URL = "https://streetstyle.maisonlooks.com/en/search?q=";
 
   function buyUrl(product) {
     return AFFILIATE + (product ? "?product=" + encodeURIComponent(product.name) : "");
@@ -100,7 +101,7 @@
       form.addEventListener("submit", (e) => {
         e.preventDefault();
         const q = input ? input.value.trim() : "";
-        window.location.href = "finds.html" + (q ? "?q=" + encodeURIComponent(q) : "");
+        window.location.href = SEARCH_REDIRECT_URL + encodeURIComponent(q);
       });
     }
   }
