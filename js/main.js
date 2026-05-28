@@ -101,7 +101,7 @@
       form.addEventListener("submit", (e) => {
         e.preventDefault();
         const q = input ? input.value.trim() : "";
-        window.location.href = SEARCH_REDIRECT_URL + encodeURIComponent(q);
+        window.open(SEARCH_REDIRECT_URL + encodeURIComponent(q), "_blank", "noopener,noreferrer");
       });
     }
   }
