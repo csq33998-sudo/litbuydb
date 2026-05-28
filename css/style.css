@@ -432,6 +432,57 @@ img { max-width: 100%; display: block; }
   font-weight: 500;
 }
 
+.litbuy-guide {
+  background: var(--bg-card);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.guide-article {
+  max-width: 980px;
+}
+
+.guide-article h2 {
+  max-width: 760px;
+  font-size: 1.8rem;
+  line-height: 1.2;
+  margin-bottom: 16px;
+}
+
+.guide-article p {
+  color: var(--text-muted);
+  font-size: 1rem;
+  line-height: 1.75;
+  max-width: 860px;
+}
+
+.guide-article p + p {
+  margin-top: 14px;
+}
+
+.guide-article-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 28px;
+  margin-top: 28px;
+}
+
+.guide-article h3 {
+  font-size: 1.05rem;
+  margin-bottom: 8px;
+}
+
+.guide-article a {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+@media (max-width: 760px) {
+  .guide-article-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Link grids */
 .link-grid {
   display: flex;
