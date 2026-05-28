@@ -27,10 +27,6 @@
     return cat.url || fallback;
   }
 
-  function externalLinkAttrs() {
-    return cfg.openInNewTab !== false ? ' target="_blank" rel="noopener noreferrer"' : "";
-  }
-
   function externalTargetAttrs(href) {
     if (!href.startsWith("http")) return "";
     return cfg.openInNewTab !== false ? ' target="_blank" rel="noopener noreferrer"' : "";
@@ -285,8 +281,5 @@
   } else {
     boot();
   }
-
-  renderCategoryGrid();
-
   window.LitBuySite = { buyUrl, renderProducts, productCard };
 })();

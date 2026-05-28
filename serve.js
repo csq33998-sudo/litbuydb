@@ -15,10 +15,20 @@ const types = {
 
 http
   .createServer((req, res) => {
-    const urlPath = decodeURIComponent((req.url.split("?")[0] || "/").replace(/^\//, "") || "index.html");
-    const file = path.join(ROOT, urlPath);
+    let urlPath;
+    try {
+      urlPath = decodeURIComponent((req.url.split("?")[0] || "/").replace(/^\/+/, "") || "index.html");
+    } catch {
+      res.writeHead(400, { "Content-Type": "text/plain; charset=utf-8" });
+      res.end("Bad Request");
+      return;
+    }
 
-    if (!file.startsWith(ROOT)) {
+    const file = path.resolve(ROOT, urlPath);
+    const relative = path.relative(ROOT, file);
+    const parts = relative.split(path.sep);
+
+    if (relative.startsWith("..") || path.isAbsolute(relative) || parts.some((part) => part.startsWith("."))) {
       res.writeHead(403);
       res.end("Forbidden");
       return;

@@ -67,6 +67,14 @@ window.LITBUY_CATEGORIES = [
     trendingUrl: "https://streetstyle.maisonlooks.com/en/s/StreetStyle/c/bottoms",
   },
   {
+    slug: "bags",
+    name: "Bags",
+    icon: "👜",
+    url: "https://streetstyle.maisonlooks.com/en/s/StreetStyle/c/bags",
+    hotUrl: "https://streetstyle.maisonlooks.com/en/s/StreetStyle/c/bags",
+    trendingUrl: "https://streetstyle.maisonlooks.com/en/s/StreetStyle/c/bags",
+  },
+  {
     slug: "headwear",
     name: "Headwear",
     icon: "🧢",
@@ -78,7 +86,6 @@ window.LITBUY_CATEGORIES = [
     slug: "accessories",
     name: "Accessories",
     icon: "⌚",
-    count: 19,
     url: "https://streetstyle.maisonlooks.com/en/s/StreetStyle/c/accessories",
     hotUrl: "https://streetstyle.maisonlooks.com/en/s/StreetStyle/c/accessories",
     trendingUrl: "https://streetstyle.maisonlooks.com/en/s/StreetStyle/c/accessories",
