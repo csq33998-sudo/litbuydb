@@ -39,9 +39,9 @@
   function categoryCardHtml(c) {
     const href = categoryHref(c);
     const external = href.startsWith("http");
-    const openExternal = external && cfg.openInNewTab !== false;
+    const newTab = external && cfg.openInNewTab !== false;
     return `
-        <a href="${href}" class="category-card${external ? " category-card--external maisonlooks-link" : ""}"${openExternal ? ' target="_blank" rel="noopener noreferrer"' : ""}>
+        <a href="${href}" class="category-card${external ? " category-card--external maisonlooks-link" : ""}"${newTab ? ' target="_blank" rel="noopener noreferrer"' : ""}>
           <span class="category-icon">${c.icon}</span>
           <span class="category-name">${c.name}</span>
           ${c.count ? `<span class="category-count">${c.count}</span>` : ""}
@@ -270,30 +270,11 @@
     update();
   }
 
-  function initMaisonlooksLinks() {
-    document.addEventListener(
-      "click",
-      (e) => {
-        const link = e.target.closest("a.maisonlooks-link");
-        if (!link || !link.href.includes("maisonlooks.com")) return;
-        if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-
-        if (cfg.openInNewTab === false) return;
-
-        e.preventDefault();
-        const opened = window.open(link.href, "_blank", "noopener,noreferrer");
-        if (!opened) window.location.assign(link.href);
-      },
-      false
-    );
-  }
-
   function boot() {
     renderCategoryGrid();
     initNav();
     initSearch();
     initFaq();
-    initMaisonlooksLinks();
     initHome();
     initFinds();
     initHeroCountUp();
