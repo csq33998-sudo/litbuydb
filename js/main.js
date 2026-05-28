@@ -34,6 +34,14 @@
     return cfg.openInNewTab !== false ? ' target="_blank" rel="noopener noreferrer"' : "";
   }
 
+  function productImageHtml(product, fallbackIcon) {
+    if (product.image) {
+      return `<img src="${product.image}" alt="${product.name}" loading="lazy" decoding="async">`;
+    }
+
+    return `<span class="product-image-fallback">${fallbackIcon}</span>`;
+  }
+
   function categoryCardHtml(c) {
     const href = categoryHref(c);
     const external = href.startsWith("http");
@@ -54,25 +62,31 @@
 
   function productCard(p) {
     const styles = p.styles ? ` [${p.styles} styles]` : "";
-    const browseUrl = maisonlooksCategoryUrl(p.category, p.badge);
+    const browseUrl = p.url || maisonlooksCategoryUrl(p.category, p.badge);
+    const hasProductUrl = Boolean(p.url);
     const badge = p.badge
       ? `<span class="product-badge product-badge--${p.badge}">${p.badge === "hot" ? "🔥 HOT" : "🔥 TRENDING"}</span>`
       : "";
     const icons = { shoes: "👟", hoodies: "🧥", "t-shirts": "👕", jackets: "🧥", pants: "👖", bags: "👜", headwear: "🧢", accessories: "⌚", jersey: "⚽", electronics: "📱", other: "✨" };
-    const browseLabel = p.badge === "hot" ? "Browse Hot Picks" : p.badge === "trending" ? "Browse Trending" : "Browse Category";
+    const icon = icons[p.category] || "📦";
+    const browseLabel = hasProductUrl ? "View Product" : p.badge === "hot" ? "Browse Hot Picks" : p.badge === "trending" ? "Browse Trending" : "Browse Category";
+    const productMeta = [p.brand, categoryLabel(p.category)].filter(Boolean).join(" / ");
+    const productDesc = p.desc || "Selected LitBuy route for shoppers who want a fast product preview before opening LitBuy.";
+    const primaryUrl = hasProductUrl ? browseUrl : buyUrl(p);
+    const primaryLabel = hasProductUrl ? "Open Product" : "Buy On LitBuy";
 
     return `
       <article class="product-card">
-        <a href="${browseUrl}" class="product-image product-image-link maisonlooks-link"${externalTargetAttrs(browseUrl)} aria-label="${browseLabel}: ${categoryLabel(p.category)}">
+        <a href="${browseUrl}" class="product-image product-image-link maisonlooks-link"${externalTargetAttrs(browseUrl)} aria-label="${browseLabel}: ${p.name}">
           ${badge}
-          ${icons[p.category] || "📦"}
+          ${productImageHtml(p, icon)}
         </a>
         <div class="product-body">
-          <div class="product-category">${categoryLabel(p.category)}</div>
+          <div class="product-category">${productMeta}</div>
           <h3>${p.name}${styles}</h3>
-          <p class="product-desc">Selected LitBuy route for shoppers who want a fast product preview before opening LitBuy.</p>
+          <p class="product-desc">${productDesc}</p>
           <a href="${browseUrl}" class="btn btn-secondary product-browse-btn maisonlooks-link"${externalTargetAttrs(browseUrl)}>${browseLabel}</a>
-          <a href="${buyUrl(p)}" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Buy On LitBuy</a>
+          <a href="${primaryUrl}" class="btn btn-primary maisonlooks-link"${externalTargetAttrs(primaryUrl)}>${primaryLabel}</a>
         </div>
       </article>`;
   }
