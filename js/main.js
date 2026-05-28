@@ -17,12 +17,31 @@
     return cat.url || "finds.html?category=" + cat.slug;
   }
 
+  function maisonlooksCategoryUrl(categorySlug, badge) {
+    const cat = (window.LITBUY_CATEGORIES || []).find((c) => c.slug === categorySlug);
+    const fallback = `${cfg.maisonlooks || "https://streetstyle.maisonlooks.com/en/s/StreetStyle"}/c/${categorySlug}`;
+    if (!cat) return fallback;
+
+    if (badge === "hot" && cat.hotUrl) return cat.hotUrl;
+    if (badge === "trending" && cat.trendingUrl) return cat.trendingUrl;
+    return cat.url || fallback;
+  }
+
+  function externalLinkAttrs() {
+    return cfg.openInNewTab !== false ? ' target="_blank" rel="noopener noreferrer"' : "";
+  }
+
+  function externalTargetAttrs(href) {
+    if (!href.startsWith("http")) return "";
+    return cfg.openInNewTab !== false ? ' target="_blank" rel="noopener noreferrer"' : "";
+  }
+
   function categoryCardHtml(c) {
     const href = categoryHref(c);
     const external = href.startsWith("http");
     const openExternal = external && cfg.openInNewTab !== false;
     return `
-        <a href="${href}" class="category-card${external ? " category-card--external" : ""}"${openExternal ? ' target="_blank" rel="noopener noreferrer"' : ""}>
+        <a href="${href}" class="category-card${external ? " category-card--external maisonlooks-link" : ""}"${openExternal ? ' target="_blank" rel="noopener noreferrer"' : ""}>
           <span class="category-icon">${c.icon}</span>
           <span class="category-name">${c.name}</span>
           ${c.count ? `<span class="category-count">${c.count}</span>` : ""}
@@ -37,21 +56,24 @@
 
   function productCard(p) {
     const styles = p.styles ? ` [${p.styles} styles]` : "";
+    const browseUrl = maisonlooksCategoryUrl(p.category, p.badge);
     const badge = p.badge
       ? `<span class="product-badge product-badge--${p.badge}">${p.badge === "hot" ? "🔥 HOT" : "🔥 TRENDING"}</span>`
       : "";
     const icons = { shoes: "👟", hoodies: "🧥", "t-shirts": "👕", jackets: "🧥", pants: "👖", bags: "👜", headwear: "🧢", accessories: "⌚", jersey: "⚽", electronics: "📱", other: "✨" };
+    const browseLabel = p.badge === "hot" ? "Browse Hot Picks" : p.badge === "trending" ? "Browse Trending" : "Browse Category";
 
     return `
       <article class="product-card">
-        <div class="product-image">
+        <a href="${browseUrl}" class="product-image product-image-link maisonlooks-link"${externalTargetAttrs(browseUrl)} aria-label="${browseLabel}: ${categoryLabel(p.category)}">
           ${badge}
           ${icons[p.category] || "📦"}
-        </div>
+        </a>
         <div class="product-body">
           <div class="product-category">${categoryLabel(p.category)}</div>
           <h3>${p.name}${styles}</h3>
           <p class="product-desc">Selected LitBuy route for shoppers who want a fast product preview before opening LitBuy.</p>
+          <a href="${browseUrl}" class="btn btn-secondary product-browse-btn maisonlooks-link"${externalTargetAttrs(browseUrl)}>${browseLabel}</a>
           <a href="${buyUrl(p)}" class="btn btn-primary" target="_blank" rel="noopener noreferrer">Buy On LitBuy</a>
         </div>
       </article>`;
@@ -248,11 +270,30 @@
     update();
   }
 
+  function initMaisonlooksLinks() {
+    document.addEventListener(
+      "click",
+      (e) => {
+        const link = e.target.closest("a.maisonlooks-link");
+        if (!link || !link.href.includes("maisonlooks.com")) return;
+        if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+
+        if (cfg.openInNewTab === false) return;
+
+        e.preventDefault();
+        const opened = window.open(link.href, "_blank", "noopener,noreferrer");
+        if (!opened) window.location.assign(link.href);
+      },
+      false
+    );
+  }
+
   function boot() {
     renderCategoryGrid();
     initNav();
     initSearch();
     initFaq();
+    initMaisonlooksLinks();
     initHome();
     initFinds();
     initHeroCountUp();

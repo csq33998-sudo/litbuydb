@@ -521,6 +521,21 @@ img { max-width: 100%; display: block; }
   position: relative;
 }
 
+.product-image-link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.product-image-link:hover {
+  opacity: 0.92;
+}
+
+.product-image-link * {
+  pointer-events: none;
+}
+
 .product-badge {
   position: absolute;
   top: 12px;
@@ -530,6 +545,7 @@ img { max-width: 100%; display: block; }
   font-size: 0.7rem;
   font-weight: 700;
   text-transform: uppercase;
+  z-index: 1;
 }
 
 .product-badge--hot { background: #ef4444; color: #fff; }
@@ -557,6 +573,14 @@ img { max-width: 100%; display: block; }
   font-size: 0.85rem;
   color: var(--text-muted);
   margin-bottom: 16px;
+}
+
+.product-body .btn {
+  width: 100%;
+}
+
+.product-body .product-browse-btn {
+  margin-bottom: 8px;
 }
 
 .btn {
