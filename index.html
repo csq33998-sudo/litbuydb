@@ -87,19 +87,19 @@
         <span></span><span></span><span></span>
       </button>
       <nav class="site-nav" id="siteNav">
-        <a href="index.html" class="active link-home">Home</a>
-        <a href="finds.html">Finds</a>
-        <a href="review.html">Resources</a>
-        <a href="categories.html">Categories</a>
-        <a href="#faq">FAQ</a>
-        <select class="lang-select" aria-label="Language">
-          <option>English</option>
-          <option>Deutsch</option>
-          <option>Fran&ccedil;ais</option>
-          <option>Espa&ntilde;ol</option>
-          <option>Italiano</option>
-          <option>Nederlands</option>
-          <option>Portugu&ecirc;s</option>
+        <a href="index.html" class="active link-home" data-i18n="nav.home">Home</a>
+        <a href="finds.html" data-i18n="nav.finds">Finds</a>
+        <a href="review.html" data-i18n="nav.resources">Resources</a>
+        <a href="categories.html" data-i18n="nav.categories">Categories</a>
+        <a href="#faq" data-i18n="nav.faq">FAQ</a>
+        <select class="lang-select" aria-label="Language" data-i18n-aria="nav.language">
+          <option value="en">English</option>
+          <option value="de">Deutsch</option>
+          <option value="fr">Français</option>
+          <option value="es">Español</option>
+          <option value="it">Italiano</option>
+          <option value="nl">Nederlands</option>
+          <option value="pt">Português</option>
         </select>
       </nav>
     </div>
@@ -107,43 +107,43 @@
 
   <section class="hero">
     <div class="container">
-      <span class="hero-label">Independent LitBuy Guide</span>
-      <h1>Discover Curated LitBuy Picks</h1>
-      <p class="hero-desc">A simple, fast, and efficient LitBuy spreadsheet resource &mdash; for finds, shopping lists, search, and category sorting, so you can browse faster and place orders through LitBuy with one click.</p>
+      <span class="hero-label" data-i18n="home.heroLabel">Independent LitBuy Guide</span>
+      <h1 data-i18n="home.heroTitle">Discover Curated LitBuy Picks</h1>
+      <p class="hero-desc" data-i18n="home.heroDesc">A simple, fast, and efficient LitBuy spreadsheet resource &mdash; for finds, shopping lists, search, and category sorting, so you can browse faster and place orders through LitBuy with one click.</p>
 
       <div class="hero-stats">
         <div class="hero-stat">
           <span class="hero-stat-num hero-stat-num--count" data-target="30000" data-format="number">0+</span>
-          <span class="hero-stat-label">Products</span>
+          <span class="hero-stat-label" data-i18n="home.products">Products</span>
         </div>
         <div class="hero-stat hero-stat--featured">
           <span class="hero-stat-num">Daily</span>
-          <span class="hero-stat-label">Updated</span>
+          <span class="hero-stat-label" data-i18n="home.updated">Updated</span>
         </div>
         <div class="hero-stat">
           <span class="hero-stat-num hero-stat-num--count" data-target="200" data-format="k">0k+</span>
-          <span class="hero-stat-label">Shoppers</span>
+          <span class="hero-stat-label" data-i18n="home.shoppers">Shoppers</span>
         </div>
       </div>
 
       <div class="trust-badges">
-        <span class="trust-badge"><span class="trust-badge-icon" aria-hidden="true">&#10003;</span>Verified sellers only</span>
-        <span class="trust-badge"><span class="trust-badge-icon" aria-hidden="true">&#10003;</span>QC photos reviewed</span>
-        <span class="trust-badge"><span class="trust-badge-icon" aria-hidden="true">&#10003;</span>Daily updates</span>
-        <span class="trust-badge"><span class="trust-badge-icon" aria-hidden="true">&#10003;</span>Free to browse</span>
+        <span class="trust-badge"><span class="trust-badge-icon" aria-hidden="true">&#10003;</span><span data-i18n="home.badgeSellers">Verified sellers only</span></span>
+        <span class="trust-badge"><span class="trust-badge-icon" aria-hidden="true">&#10003;</span><span data-i18n="home.badgeQc">QC photos reviewed</span></span>
+        <span class="trust-badge"><span class="trust-badge-icon" aria-hidden="true">&#10003;</span><span data-i18n="home.badgeUpdates">Daily updates</span></span>
+        <span class="trust-badge"><span class="trust-badge-icon" aria-hidden="true">&#10003;</span><span data-i18n="home.badgeFree">Free to browse</span></span>
       </div>
 
       <form class="search-box" id="heroSearch">
-        <input type="search" id="heroSearchInput" placeholder="Search LitBuy finds..." aria-label="Search">
-        <button type="submit">Search</button>
+        <input type="search" id="heroSearchInput" placeholder="Search LitBuy finds..." aria-label="Search" data-i18n-placeholder="home.searchPlaceholder" data-i18n-aria="home.search">
+        <button type="submit" data-i18n="home.search">Search</button>
       </form>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
-      <p class="section-label">Categories</p>
-      <h2 class="section-title">Browse LitBuy Finds Categories</h2>
+      <p class="section-label" data-i18n="home.categoriesLabel">Categories</p>
+      <h2 class="section-title" data-i18n="home.categoriesTitle">Browse LitBuy Finds Categories</h2>
       <div class="category-grid" id="categoryGrid"></div>
     </div>
   </section>
@@ -151,22 +151,22 @@
   <section class="section litbuy-guide">
     <div class="container">
       <article class="guide-article">
-        <p class="section-label">LitBuy Guide</p>
-        <h2>What is LitBuy Spreadsheet and how do shoppers use it?</h2>
-        <p>
+        <p class="section-label" data-i18n="home.guideLabel">LitBuy Guide</p>
+        <h2 data-i18n="home.guideTitle">What is LitBuy Spreadsheet and how do shoppers use it?</h2>
+        <p data-i18n="home.guideBody1">
           LitBuy is a China shopping agent used by international shoppers to browse products from marketplaces such as Taobao, Weidian, and 1688. Instead of ordering directly from sellers, shoppers can use LitBuy to place a purchase request, receive warehouse quality-check photos, combine multiple items into one parcel, and choose an international shipping line.
         </p>
-        <p>
+        <p data-i18n="home.guideBody2">
           This LitBuy Spreadsheet resource helps users find popular product categories faster, including shoes, hoodies, T-shirts, jackets, bags, accessories, and other streetwear finds. Each category route is designed to make product discovery easier before opening a MaisonLooks or LitBuy shopping page.
         </p>
         <div class="guide-article-grid">
           <div>
-            <h3>Why shoppers search for a LitBuy Spreadsheet</h3>
-            <p>Many users look for LitBuy finds when they want curated product ideas, QC-friendly sellers, budget options, or quick links for building a haul. A structured LitBuy Spreadsheet page saves time compared with browsing scattered posts or seller links one by one.</p>
+            <h3 data-i18n="home.guideSub1">Why shoppers search for a LitBuy Spreadsheet</h3>
+            <p data-i18n="home.guideSub1Body">Many users look for LitBuy finds when they want curated product ideas, QC-friendly sellers, budget options, or quick links for building a haul. A structured LitBuy Spreadsheet page saves time compared with browsing scattered posts or seller links one by one.</p>
           </div>
           <div>
-            <h3>How to start browsing</h3>
-            <p>Use the search box above to look up a product keyword, or browse the category cards to open a focused product route. For more details, read the <a href="review.html">LitBuy review</a>, explore <a href="finds.html">LitBuy finds</a>, or compare <a href="alternatives.html">LitBuy alternatives</a>.</p>
+            <h3 data-i18n="home.guideSub2">How to start browsing</h3>
+            <p data-i18n="home.guideSub2Body">Use the search box above to look up a product keyword, or browse the category cards to open a focused product route. For more details, read the LitBuy review, explore LitBuy finds, or compare LitBuy alternatives.</p>
           </div>
         </div>
       </article>
@@ -175,33 +175,33 @@
 
   <section class="section" style="background:var(--bg-card)">
     <div class="container">
-      <p class="section-label">Resource Hub</p>
-      <h2 class="section-title">Explore LitBuy Resources</h2>
+      <p class="section-label" data-i18n="home.resourcesLabel">Resource Hub</p>
+      <h2 class="section-title" data-i18n="home.resourcesTitle">Explore LitBuy Resources</h2>
       <div class="resource-grid">
         <a href="finds.html" class="resource-card">
           <div class="resource-card-icon">&#128230;</div>
           <h3>LitBuy Finds</h3>
-          <span>Open resource &rarr;</span>
+          <span data-i18n="home.openResource">Open resource &rarr;</span>
         </a>
         <a href="spreadsheet.html" class="resource-card">
           <div class="resource-card-icon">&#128202;</div>
           <h3>LitBuy Spreadsheet</h3>
-          <span>Open resource &rarr;</span>
+          <span data-i18n="home.openResource">Open resource &rarr;</span>
         </a>
         <a href="review.html" class="resource-card">
           <div class="resource-card-icon">&#11088;</div>
           <h3>LitBuy Review</h3>
-          <span>Open resource &rarr;</span>
+          <span data-i18n="home.openResource">Open resource &rarr;</span>
         </a>
         <a href="haul.html" class="resource-card">
           <div class="resource-card-icon">&#128248;</div>
           <h3>LitBuy Haul</h3>
-          <span>Open resource &rarr;</span>
+          <span data-i18n="home.openResource">Open resource &rarr;</span>
         </a>
         <a href="alternatives.html" class="resource-card">
           <div class="resource-card-icon">&#128260;</div>
           <h3>LitBuy Alternatives</h3>
-          <span>Open resource &rarr;</span>
+          <span data-i18n="home.openResource">Open resource &rarr;</span>
         </a>
       </div>
     </div>
@@ -209,44 +209,44 @@
 
   <section class="section">
     <div class="container">
-      <p class="section-label">Product Routes</p>
-      <h2 class="section-title">Popular LitBuy Finds</h2>
+      <p class="section-label" data-i18n="home.productRoutesLabel">Product Routes</p>
+      <h2 class="section-title" data-i18n="home.productRoutesTitle">Popular LitBuy Finds</h2>
       <div class="products-grid" id="popularProducts"></div>
     </div>
   </section>
 
   <section class="section" style="background:var(--bg-card)">
     <div class="container">
-      <p class="section-label">Brand Routes</p>
-      <h2 class="section-title">Popular LitBuy Finds Brands</h2>
+      <p class="section-label" data-i18n="home.brandRoutesLabel">Brand Routes</p>
+      <h2 class="section-title" data-i18n="home.brandRoutesTitle">Popular LitBuy Finds Brands</h2>
       <div class="link-grid" id="brandRoutes"></div>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
-      <p class="section-label">Community</p>
-      <h2 class="section-title">Community Picks</h2>
+      <p class="section-label" data-i18n="home.communityLabel">Community</p>
+      <h2 class="section-title" data-i18n="home.communityTitle">Community Picks</h2>
       <div class="community-grid">
         <div class="community-card">
-          <h3>Most Popular This Week</h3>
-          <p>Fast category routes for shoppers opening LitBuy spreadsheet style searches this week.</p>
-          <a href="finds.html?sort=popular" class="btn btn-secondary">Search on LitBuy</a>
+          <h3 data-i18n="home.communityCard1Title">Most Popular This Week</h3>
+          <p data-i18n="home.communityCard1Body">Fast category routes for shoppers opening LitBuy spreadsheet style searches this week.</p>
+          <a href="finds.html?sort=popular" class="btn btn-secondary" data-i18n="home.searchOnLitBuy">Search on LitBuy</a>
         </div>
         <div class="community-card">
-          <h3>Trending Finds</h3>
-          <p>Streetwear, shoes, hoodie, and accessories routes selected for quick LitBuy browsing.</p>
-          <a href="finds.html?sort=trending" class="btn btn-secondary">Search on LitBuy</a>
+          <h3 data-i18n="home.communityCard2Title">Trending Finds</h3>
+          <p data-i18n="home.communityCard2Body">Streetwear, shoes, hoodie, and accessories routes selected for quick LitBuy browsing.</p>
+          <a href="finds.html?sort=trending" class="btn btn-secondary" data-i18n="home.searchOnLitBuy">Search on LitBuy</a>
         </div>
         <div class="community-card">
-          <h3>Best Budget Finds</h3>
-          <p>Budget-friendly discovery paths for users comparing platform finds before opening product pages.</p>
-          <a href="finds.html?sort=budget" class="btn btn-secondary">Search on LitBuy</a>
+          <h3 data-i18n="home.communityCard3Title">Best Budget Finds</h3>
+          <p data-i18n="home.communityCard3Body">Budget-friendly discovery paths for users comparing platform finds before opening product pages.</p>
+          <a href="finds.html?sort=budget" class="btn btn-secondary" data-i18n="home.searchOnLitBuy">Search on LitBuy</a>
         </div>
         <div class="community-card">
-          <h3>Editor's Picks</h3>
-          <p>Compact editor routes for LitBuy users who want brands, products, and search shortcuts.</p>
-          <a href="finds.html?sort=editor" class="btn btn-secondary">Search on LitBuy</a>
+          <h3 data-i18n="home.communityCard4Title">Editor's Picks</h3>
+          <p data-i18n="home.communityCard4Body">Compact editor routes for LitBuy users who want brands, products, and search shortcuts.</p>
+          <a href="finds.html?sort=editor" class="btn btn-secondary" data-i18n="home.searchOnLitBuy">Search on LitBuy</a>
         </div>
       </div>
     </div>
@@ -254,11 +254,11 @@
 
   <section class="section" id="faq" style="background:var(--bg-card)">
     <div class="container">
-      <p class="section-label">FAQ</p>
-      <h2 class="section-title">LitBuy FAQ</h2>
+      <p class="section-label" data-i18n="nav.faq">FAQ</p>
+      <h2 class="section-title" data-i18n="home.faqTitle">LitBuy FAQ</h2>
       <div class="faq-list">
         <div class="faq-item">
-          <button class="faq-question" aria-expanded="false">What is LitBuy?</button>
+          <button class="faq-question" aria-expanded="false" data-i18n="home.faqQ1">What is LitBuy?</button>
           <div class="faq-answer">
             <p><strong>LitBuy</strong> is a China shopping agent that helps international buyers purchase from <strong>Taobao</strong>, <strong>Weidian</strong>, and <strong>1688</strong> &mdash; with QC photos, warehouse storage, and worldwide shipping.</p>
             <p>This site is an independent <strong>LitBuy Spreadsheet</strong> resource for shoppers searching <a href="finds.html">LitBuy finds</a>, <a href="spreadsheet.html">spreadsheet links</a>, <a href="review.html">LitBuy reviews</a>, haul photos, and shopping guides. We organize 30,000+ curated product routes so you can discover items faster and order through <a href="https://litbuy.com" target="_blank" rel="noopener noreferrer">LitBuy.com</a> with one click.</p>
@@ -271,7 +271,7 @@
           </div>
         </div>
         <div class="faq-item">
-          <button class="faq-question" aria-expanded="false">Is this an ecommerce store?</button>
+          <button class="faq-question" aria-expanded="false" data-i18n="home.faqQ2">Is this an ecommerce store?</button>
           <div class="faq-answer">
             <p>No. This is an informational <strong>LitBuy Spreadsheet</strong> resource and redirect hub &mdash; not a direct ecommerce store. We help international shoppers discover, compare, and route to the best <strong>LitBuy finds</strong> before purchasing.</p>
             <ul>
@@ -287,7 +287,7 @@
           </div>
         </div>
         <div class="faq-item">
-          <button class="faq-question" aria-expanded="false">How do I use this resource?</button>
+          <button class="faq-question" aria-expanded="false" data-i18n="home.faqQ3">How do I use this resource?</button>
           <div class="faq-answer">
             <p>Using this <strong>LitBuy shopping guide</strong> takes just a few steps:</p>
             <ol class="faq-steps">
@@ -305,7 +305,7 @@
           </div>
         </div>
         <div class="faq-item">
-          <button class="faq-question" aria-expanded="false">What are the best LitBuy Finds?</button>
+          <button class="faq-question" aria-expanded="false" data-i18n="home.faqQ4">What are the best LitBuy Finds?</button>
           <div class="faq-answer">
             <p>The best <strong>LitBuy finds</strong> depend on your style, budget, and category. These are the most searched routes on our <strong>LitBuy Spreadsheet</strong>:</p>
             <ul>
@@ -324,7 +324,7 @@
           </div>
         </div>
         <div class="faq-item">
-          <button class="faq-question" aria-expanded="false">Why buy through LitBuy?</button>
+          <button class="faq-question" aria-expanded="false" data-i18n="home.faqQ5">Why buy through LitBuy?</button>
           <div class="faq-answer">
             <p><strong>LitBuy.com</strong> is a leading China shopping agent trusted by 200k+ international buyers. Key benefits include:</p>
             <ul>
@@ -353,12 +353,12 @@
             <img src="images/litbuy-logo.png" alt="LitBuy Spreadsheet" class="logo-mark" width="36" height="36">
             <span class="logo-name"><em>LitBuy</em> Finds</span>
           </a>
-          <p>Google SEO resource, shopping guide, and LitBuy redirect hub.</p>
+          <p data-i18n="home.footerDesc">Google SEO resource, shopping guide, and LitBuy redirect hub.</p>
         </div>
         <div class="footer-links">
-          <a href="about.html">About</a>
-          <a href="privacy.html">Privacy Policy</a>
-          <a href="terms.html">Terms</a>
+          <a href="about.html" data-i18n="footer.about">About</a>
+          <a href="privacy.html" data-i18n="footer.privacy">Privacy Policy</a>
+          <a href="terms.html" data-i18n="footer.terms">Terms</a>
           <a href="https://litbuy.com" target="_blank" rel="noopener noreferrer">LitBuy.com</a>
         </div>
       </div>
@@ -369,7 +369,8 @@
   </footer>
 
   <script src="js/config.js"></script>
+  <script src="js/i18n.js?v=20260529"></script>
   <script src="js/products.js"></script>
-  <script src="js/main.js"></script>
+  <script src="js/main.js?v=20260529"></script>
 </body>
 </html>

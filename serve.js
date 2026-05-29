@@ -11,6 +11,7 @@ const types = {
   ".js": "application/javascript; charset=utf-8",
   ".png": "image/png",
   ".svg": "image/svg+xml",
+  ".webp": "image/webp",
 };
 
 http
