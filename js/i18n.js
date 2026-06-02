@@ -66,7 +66,7 @@
       "home.faqQ3": "How do I use this resource?",
       "home.faqQ4": "What are the best LitBuy Finds?",
       "home.faqQ5": "Why buy through LitBuy?",
-      "home.footerDesc": "Google SEO resource, shopping guide, and LitBuy redirect hub.",
+      "home.footerDesc": "Google Spreadsheet, shopping guide, and LitBuy redirect hub.",
       "footer.about": "About",
       "footer.privacy": "Privacy Policy",
       "footer.terms": "Terms"
