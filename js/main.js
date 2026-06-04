@@ -70,6 +70,33 @@
       "home.faqQ4": "What are the best LitBuy Finds?",
       "home.faqQ5": "Why buy through LitBuy?",
       "home.footerDesc": "Google Spreadsheet, shopping guide, and LitBuy redirect hub.",
+      "home.startLabel": "Start Here",
+      "home.startTitle": "New to LitBuy? Start with the spreadsheet workflow",
+      "home.startSubtitle": "Use this site as a practical route map before placing an order. The goal is to move from product discovery to QC review without wasting time on scattered links.",
+      "home.startStep1Title": "Browse LitBuy Spreadsheet",
+      "home.startStep1Body": "Start with curated categories, popular product routes, and brand shortcuts for Taobao, Weidian, and 1688 finds.",
+      "home.startStep2Title": "Open a Product Link",
+      "home.startStep2Body": "Compare product names, categories, and route pages before opening the LitBuy or MaisonLooks ordering page.",
+      "home.startStep3Title": "Order Through LitBuy",
+      "home.startStep3Body": "Use LitBuy to submit the item, manage warehouse intake, combine parcels, and prepare international shipping.",
+      "home.startStep4Title": "Check QC Photos",
+      "home.startStep4Body": "Review warehouse photos, confirm sizing and quality, then choose a shipping line for your haul.",
+      "home.latestLabel": "Latest Guides",
+      "home.latestTitle": "LitBuy shopping guides for beginners",
+      "home.latestSubtitle": "Short resource pages for the questions shoppers usually ask before building a haul.",
+      "home.aboutSpreadsheetLabel": "About Our Spreadsheet",
+      "home.aboutSpreadsheetTitle": "Why this LitBuy Spreadsheet is built for product discovery",
+      "home.compareLabel": "Compare & Tips",
+      "home.compareTitle": "Compare agents and plan smarter orders",
+      "footer.spreadsheet": "Spreadsheet",
+      "footer.guides": "Guides",
+      "footer.company": "Company",
+      "footer.finds": "LitBuy Finds",
+      "footer.spreadsheetLinks": "Spreadsheet Links",
+      "footer.categories": "Categories",
+      "footer.review": "LitBuy Review",
+      "footer.haul": "Haul Guide",
+      "footer.alternatives": "Alternatives",
       "footer.about": "About",
       "footer.privacy": "Privacy Policy",
       "footer.terms": "Terms"
@@ -146,9 +173,17 @@
     return cfg.openInNewTab !== false ? ' target="_blank" rel="noopener noreferrer"' : "";
   }
 
+  function escapeAttr(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/"/g, "&quot;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
   function productImageHtml(product, fallbackIcon) {
     if (product.image) {
-      return `<img src="${product.image}" alt="" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="product-image-fallback" hidden>${fallbackIcon}</span>`;
+      return `<img src="${product.image}" alt="${escapeAttr(product.name)}" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.hidden=true;this.nextElementSibling.hidden=false"><span class="product-image-fallback" hidden>${fallbackIcon}</span>`;
     }
 
     return `<span class="product-image-fallback">${fallbackIcon}</span>`;
