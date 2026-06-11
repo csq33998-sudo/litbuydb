@@ -30,6 +30,18 @@ for (const file of JS_FILES) {
   }
 }
 
+const dataSandbox = { window: {} };
+vm.runInNewContext(read("js/products.js"), dataSandbox, { filename: "js/products.js" });
+for (const product of dataSandbox.window.LITBUY_PRODUCTS || []) {
+  if (!product.image) {
+    errors.push(`js/products.js: product ${product.id || product.name} is missing an image`);
+    continue;
+  }
+  if (!fs.existsSync(path.join(ROOT, product.image))) {
+    errors.push(`js/products.js: missing product image ${product.image}`);
+  }
+}
+
 for (const file of TEXT_FILES) {
   const text = read(file);
   const lines = text.split(/\r?\n/);

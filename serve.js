@@ -10,6 +10,8 @@ const types = {
   ".css": "text/css; charset=utf-8",
   ".js": "application/javascript; charset=utf-8",
   ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
   ".svg": "image/svg+xml",
   ".webp": "image/webp",
 };
@@ -17,7 +19,7 @@ const types = {
 function isPublicFile(relative) {
   const normalized = relative.split(path.sep).join("/");
   if (/^[a-z0-9-]+\.html$/i.test(normalized)) return true;
-  if (/^(?:css|js|images)\/[a-z0-9._/-]+\.(?:css|js|png|svg|webp)$/i.test(normalized)) return true;
+  if (/^(?:css|js|images)\/[a-z0-9._/-]+\.(?:css|js|png|jpe?g|svg|webp)$/i.test(normalized)) return true;
   return /^(?:robots\.txt|sitemap\.xml|favicon\.png|apple-touch-icon\.png)$/i.test(normalized);
 }
 
