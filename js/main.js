@@ -917,6 +917,7 @@
   function formatHeroCount(value, format) {
     const n = Math.round(value);
     if (format === "k") return `${n}k+`;
+    if (format === "plain") return `${n}+`;
     return `${n.toLocaleString("en-US")}+`;
   }
 
