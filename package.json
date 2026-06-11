@@ -1,0 +1,13 @@
+{
+  "name": "litibuy-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static LitBuy spreadsheet resource site.",
+  "scripts": {
+    "check": "node scripts/check-site.js",
+    "serve": "node serve.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

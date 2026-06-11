@@ -8,10 +8,10 @@ window.SITE_CONFIG = {
   openInNewTab: true,
   maisonlooks: "https://streetstyle.maisonlooks.com/en/s/StreetStyle",
   stats: {
-    finds: "2000+",
-    products: "500+",
-    brands: "50+",
-    categories: "10+",
+    finds: "24",
+    products: "24",
+    brands: "18",
+    categories: "11",
     updated: "Weekly",
   },
 };

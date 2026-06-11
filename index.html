@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -65,7 +65,7 @@
         "name": "What are the best LitBuy Finds?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Popular LitBuy finds include shoes (Jordan 4, Dunk, Yeezy), hoodies (Essentials, Stussy, Denim Tears), T-shirts (Chrome Hearts, Balenciaga), and jackets (Moncler, North Face). Browse 30,000+ curated spreadsheet links updated weekly."
+          "text": "Popular LitBuy finds include shoes, hoodies, T-shirts, jackets, bags, accessories, jerseys, and electronics. Browse the curated spreadsheet index for current product routes updated weekly."
         }
       },
       {
@@ -95,16 +95,8 @@
         <a href="finds.html" data-i18n="nav.finds">Finds</a>
         <a href="review.html" data-i18n="nav.resources">Resources</a>
         <a href="categories.html" data-i18n="nav.categories">Categories</a>
+        <a href="help.html">Help</a>
         <a href="#faq" data-i18n="nav.faq">FAQ</a>
-        <select class="lang-select" aria-label="Language" data-i18n-aria="nav.language">
-          <option value="en">English</option>
-          <option value="de">Deutsch</option>
-          <option value="fr">Français</option>
-          <option value="es">Español</option>
-          <option value="it">Italiano</option>
-          <option value="nl">Nederlands</option>
-          <option value="pt">Português</option>
-        </select>
       </nav>
     </div>
   </header>
@@ -117,16 +109,16 @@
 
       <div class="hero-stats">
         <div class="hero-stat">
-          <span class="hero-stat-num hero-stat-num--count" data-target="30000" data-format="number">0+</span>
+          <span class="hero-stat-num hero-stat-num--count" data-target="24" data-format="number">0+</span>
           <span class="hero-stat-label" data-i18n="home.products">Products</span>
         </div>
         <div class="hero-stat hero-stat--featured">
-          <span class="hero-stat-num">Daily</span>
+          <span class="hero-stat-num">Weekly</span>
           <span class="hero-stat-label" data-i18n="home.updated">Updated</span>
         </div>
         <div class="hero-stat">
-          <span class="hero-stat-num hero-stat-num--count" data-target="200" data-format="k">0k+</span>
-          <span class="hero-stat-label" data-i18n="home.shoppers">Shoppers</span>
+          <span class="hero-stat-num hero-stat-num--count" data-target="18" data-format="number">0+</span>
+          <span class="hero-stat-label">Brands</span>
         </div>
       </div>
 
@@ -237,6 +229,11 @@
           <h3>LitBuy Alternatives</h3>
           <span data-i18n="home.openResource">Open resource &rarr;</span>
         </a>
+        <a href="help.html" class="resource-card">
+          <div class="resource-card-icon">&#10067;</div>
+          <h3>LitBuy Help</h3>
+          <span data-i18n="home.openResource">Open resource &rarr;</span>
+        </a>
       </div>
     </div>
   </section>
@@ -248,28 +245,28 @@
       <p class="section-subtitle" data-i18n="home.latestSubtitle">Short resource pages for the questions shoppers usually ask before building a haul.</p>
       <div class="guide-card-grid">
         <a href="review.html" class="guide-card">
-          <span class="guide-card-kicker">Buying Guide</span>
-          <h3>How to buy with LitBuy</h3>
-          <p>Learn how paste-link ordering, warehouse storage, QC photos, and international shipping work together.</p>
-          <span class="guide-card-link">Read guide &rarr;</span>
+          <span class="guide-card-kicker" data-i18n="home.latestCard1Kicker">Buying Guide</span>
+          <h3 data-i18n="home.latestCard1Title">How to buy with LitBuy</h3>
+          <p data-i18n="home.latestCard1Body">Learn how paste-link ordering, warehouse storage, QC photos, and international shipping work together.</p>
+          <span class="guide-card-link" data-i18n="home.latestCard1Link">Read guide &rarr;</span>
         </a>
         <a href="haul.html" class="guide-card">
-          <span class="guide-card-kicker">Haul Guide</span>
-          <h3>Planning a LitBuy haul</h3>
-          <p>Use spreadsheet routes to organize shoes, hoodies, jackets, accessories, and other finds before shipping.</p>
-          <span class="guide-card-link">Read guide &rarr;</span>
+          <span class="guide-card-kicker" data-i18n="home.latestCard2Kicker">Haul Guide</span>
+          <h3 data-i18n="home.latestCard2Title">Planning a LitBuy haul</h3>
+          <p data-i18n="home.latestCard2Body">Use spreadsheet routes to organize shoes, hoodies, jackets, accessories, and other finds before shipping.</p>
+          <span class="guide-card-link" data-i18n="home.latestCard2Link">Read guide &rarr;</span>
         </a>
         <a href="finds.html" class="guide-card">
-          <span class="guide-card-kicker">Finds Guide</span>
-          <h3>Best categories to browse first</h3>
-          <p>Start with high-demand routes like shoes, streetwear, bags, accessories, and budget-friendly basics.</p>
-          <span class="guide-card-link">Open finds &rarr;</span>
+          <span class="guide-card-kicker" data-i18n="home.latestCard3Kicker">Finds Guide</span>
+          <h3 data-i18n="home.latestCard3Title">Best categories to browse first</h3>
+          <p data-i18n="home.latestCard3Body">Start with high-demand routes like shoes, streetwear, bags, accessories, and budget-friendly basics.</p>
+          <span class="guide-card-link" data-i18n="home.latestCard3Link">Open finds &rarr;</span>
         </a>
         <a href="alternatives.html" class="guide-card">
-          <span class="guide-card-kicker">Compare Guide</span>
-          <h3>LitBuy alternatives and agent comparison</h3>
-          <p>Compare LitBuy with other shopping agents before choosing where to order and ship your items.</p>
-          <span class="guide-card-link">Compare agents &rarr;</span>
+          <span class="guide-card-kicker" data-i18n="home.latestCard4Kicker">Compare Guide</span>
+          <h3 data-i18n="home.latestCard4Title">LitBuy alternatives and agent comparison</h3>
+          <p data-i18n="home.latestCard4Body">Compare LitBuy with other shopping agents before choosing where to order and ship your items.</p>
+          <span class="guide-card-link" data-i18n="home.latestCard4Link">Compare agents &rarr;</span>
         </a>
       </div>
     </div>
@@ -297,18 +294,18 @@
         <div class="seo-panel-main">
           <p class="section-label" data-i18n="home.aboutSpreadsheetLabel">About Our Spreadsheet</p>
           <h2 data-i18n="home.aboutSpreadsheetTitle">Why this LitBuy Spreadsheet is built for product discovery</h2>
-          <p>The LitBuy Spreadsheet is designed as a practical shopping index for international buyers who want to discover product ideas before placing an order. Instead of searching through scattered posts, old seller links, or disconnected marketplace pages, shoppers can start with organized categories, brand routes, and curated finds.</p>
-          <p>Each section is written around the way people actually search: LitBuy finds, product spreadsheets, shopping agent reviews, hauls, QC photos, Taobao links, Weidian links, 1688 routes, and category-specific items like shoes, hoodies, jackets, bags, and accessories.</p>
-          <p>This site is independent and informational. Product checkout, QC review, warehouse storage, and international shipping are handled through LitBuy.com or the linked shopping pages. Our role is to make discovery faster and give each shopper a clearer path from keyword search to order preparation.</p>
+          <p data-i18n="home.seoBody1">The LitBuy Spreadsheet is designed as a practical shopping index for international buyers who want to discover product ideas before placing an order. Instead of searching through scattered posts, old seller links, or disconnected marketplace pages, shoppers can start with organized categories, brand routes, and curated finds.</p>
+          <p data-i18n="home.seoBody2">Each section is written around the way people actually search: LitBuy finds, product spreadsheets, shopping agent reviews, hauls, QC photos, Taobao links, Weidian links, 1688 routes, and category-specific items like shoes, hoodies, jackets, bags, and accessories.</p>
+          <p data-i18n="home.seoBody3">This site is independent and informational. Product checkout, QC review, warehouse storage, and international shipping are handled through LitBuy.com or the linked shopping pages. Our role is to make discovery faster and give each shopper a clearer path from keyword search to order preparation.</p>
         </div>
         <aside class="seo-panel-aside">
-          <h3>What you can browse</h3>
+          <h3 data-i18n="home.browseTitle">What you can browse</h3>
           <ul>
-            <li>Curated LitBuy finds and category routes</li>
-            <li>Spreadsheet-style product shortcuts</li>
-            <li>Shopping guide and review content</li>
-            <li>Haul planning and QC-focused tips</li>
-            <li>Agent comparison and alternative pages</li>
+            <li data-i18n="home.browse1">Curated LitBuy finds and category routes</li>
+            <li data-i18n="home.browse2">Spreadsheet-style product shortcuts</li>
+            <li data-i18n="home.browse3">Shopping guide and review content</li>
+            <li data-i18n="home.browse4">Haul planning and QC-focused tips</li>
+            <li data-i18n="home.browse5">Agent comparison and alternative pages</li>
           </ul>
         </aside>
       </article>
@@ -350,19 +347,19 @@
       <h2 class="section-title" data-i18n="home.compareTitle">Compare agents and plan smarter orders</h2>
       <div class="compare-grid">
         <article class="compare-card">
-          <h3>LitBuy vs other agents</h3>
-          <p>Use the alternatives page to compare shopping agent workflows, discovery routes, QC handling, warehouse steps, and shipping considerations.</p>
-          <a href="alternatives.html" class="btn btn-secondary">View alternatives</a>
+          <h3 data-i18n="home.compareCard1Title">LitBuy vs other agents</h3>
+          <p data-i18n="home.compareCard1Body">Use the alternatives page to compare shopping agent workflows, discovery routes, QC handling, warehouse steps, and shipping considerations.</p>
+          <a href="alternatives.html" class="btn btn-secondary" data-i18n="home.compareCard1Cta">View alternatives</a>
         </article>
         <article class="compare-card">
-          <h3>Deals and shopping tips</h3>
-          <p>Before ordering, compare item cost, estimated shipping weight, coupon availability, storage needs, and whether the seller has enough product information.</p>
-          <a href="review.html" class="btn btn-secondary">Read review</a>
+          <h3 data-i18n="home.compareCard2Title">Deals and shopping tips</h3>
+          <p data-i18n="home.compareCard2Body">Before ordering, compare item cost, estimated shipping weight, coupon availability, storage needs, and whether the seller has enough product information.</p>
+          <a href="review.html" class="btn btn-secondary" data-i18n="home.compareCard2Cta">Read review</a>
         </article>
         <article class="compare-card">
-          <h3>Build a better haul</h3>
-          <p>Group similar items, check QC photos carefully, avoid duplicate routes, and use category pages to find matching pieces for one shipment.</p>
-          <a href="haul.html" class="btn btn-secondary">Plan haul</a>
+          <h3 data-i18n="home.compareCard3Title">Build a better haul</h3>
+          <p data-i18n="home.compareCard3Body">Group similar items, check QC photos carefully, avoid duplicate routes, and use category pages to find matching pieces for one shipment.</p>
+          <a href="haul.html" class="btn btn-secondary" data-i18n="home.compareCard3Cta">Plan haul</a>
         </article>
       </div>
     </div>
@@ -377,7 +374,7 @@
           <button class="faq-question" aria-expanded="false" data-i18n="home.faqQ1">What is LitBuy?</button>
           <div class="faq-answer">
             <p><strong>LitBuy</strong> is a China shopping agent that helps international buyers purchase from <strong>Taobao</strong>, <strong>Weidian</strong>, and <strong>1688</strong> &mdash; with QC photos, warehouse storage, and worldwide shipping.</p>
-            <p>This site is an independent <strong>LitBuy Spreadsheet</strong> resource for shoppers searching <a href="finds.html">LitBuy finds</a>, <a href="spreadsheet.html">spreadsheet links</a>, <a href="review.html">LitBuy reviews</a>, haul photos, and shopping guides. We organize 30,000+ curated product routes so you can discover items faster and order through <a href="https://litbuy.com" target="_blank" rel="noopener noreferrer">LitBuy.com</a> with one click.</p>
+            <p>This site is an independent <strong>LitBuy Spreadsheet</strong> resource for shoppers searching <a href="finds.html">LitBuy finds</a>, <a href="spreadsheet.html">spreadsheet links</a>, <a href="review.html">LitBuy reviews</a>, haul photos, and shopping guides. We organize a focused set of curated product routes so you can discover items faster and order through <a href="https://litbuy.com" target="_blank" rel="noopener noreferrer">LitBuy.com</a> with one click.</p>
             <div class="faq-tags">
               <span class="faq-tag">LitBuy Agent</span>
               <span class="faq-tag">Taobao</span>
@@ -430,7 +427,7 @@
               <li><a href="finds.html?category=t-shirts">T-Shirts</a> &mdash; Chrome Hearts, Balenciaga, Acne Studios</li>
               <li><a href="finds.html?category=jackets">Jackets</a> &mdash; Moncler, North Face, CP Company</li>
             </ul>
-            <p>Explore 30,000+ curated links on our full <a href="spreadsheet.html">LitBuy spreadsheet</a>, updated weekly from trusted Taobao and Weidian sellers.</p>
+            <p>Explore the curated links on our full <a href="spreadsheet.html">LitBuy spreadsheet</a>, updated weekly with category routes and product ideas for Taobao, Weidian, and 1688 browsing.</p>
             <div class="faq-tags">
               <span class="faq-tag">LitBuy Finds</span>
               <span class="faq-tag">Chrome Hearts</span>
@@ -483,6 +480,7 @@
             <a href="review.html" data-i18n="footer.review">LitBuy Review</a>
             <a href="haul.html" data-i18n="footer.haul">Haul Guide</a>
             <a href="alternatives.html" data-i18n="footer.alternatives">Alternatives</a>
+            <a href="help.html" data-i18n="footer.help">Help</a>
           </div>
           <div class="footer-link-group">
             <h3 data-i18n="footer.company">Company</h3>
@@ -494,13 +492,13 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <p>&copy; 2026 LitBuy Spreadsheet Resource. Not affiliated with LitBuy brand.</p>
+        <p data-i18n="footer.copyright">&copy; 2026 LitBuy Spreadsheet Resource. Not affiliated with LitBuy brand.</p>
       </div>
     </div>
   </footer>
 
   <script src="js/config.js"></script>
   <script src="js/products.js"></script>
-  <script src="js/main.js?v=20260604"></script>
+  <script src="js/main.js?v=20260611"></script>
 </body>
 </html>

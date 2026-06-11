@@ -14,6 +14,13 @@ const types = {
   ".webp": "image/webp",
 };
 
+function isPublicFile(relative) {
+  const normalized = relative.split(path.sep).join("/");
+  if (/^[a-z0-9-]+\.html$/i.test(normalized)) return true;
+  if (/^(?:css|js|images)\/[a-z0-9._/-]+\.(?:css|js|png|svg|webp)$/i.test(normalized)) return true;
+  return /^(?:robots\.txt|sitemap\.xml|favicon\.png|apple-touch-icon\.png)$/i.test(normalized);
+}
+
 http
   .createServer((req, res) => {
     let urlPath;
@@ -29,7 +36,12 @@ http
     const relative = path.relative(ROOT, file);
     const parts = relative.split(path.sep);
 
-    if (relative.startsWith("..") || path.isAbsolute(relative) || parts.some((part) => part.startsWith("."))) {
+    if (
+      relative.startsWith("..") ||
+      path.isAbsolute(relative) ||
+      parts.some((part) => part.startsWith(".")) ||
+      !isPublicFile(relative)
+    ) {
       res.writeHead(403);
       res.end("Forbidden");
       return;
