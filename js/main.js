@@ -27,7 +27,6 @@
   ];
   LANG_OPTIONS.splice(0, LANG_OPTIONS.length,
     { code: "en", label: "English", flag: "EN" },
-    { code: "zh", label: "中文", flag: "ZH" },
     { code: "pl", label: "Polski", flag: "PL" },
     { code: "de", label: "Deutsch", flag: "DE" },
     { code: "fr", label: "Français", flag: "FR" },
@@ -1339,6 +1338,19 @@
     return href === "index.html" || href === "./" || href === "/" || href.endsWith("/index.html");
   }
 
+  function initHomeRefreshScrollTop() {
+    if (!isHomePage() || window.location.hash) return;
+    if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+
+    const navigation = performance.getEntriesByType?.("navigation")?.[0];
+    const isReload = navigation ? navigation.type === "reload" : performance.navigation?.type === 1;
+    if (!isReload) return;
+
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    });
+  }
+
   function initHeroCountUp() {
     if (!isHomePage()) return;
 
@@ -1429,6 +1441,7 @@
   function boot() {
     renderCategoryGrid();
     renderCategoryProductGrid();
+    initHomeRefreshScrollTop();
     initNav();
     initSearch();
     initFaq();
