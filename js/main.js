@@ -1014,6 +1014,29 @@
     });
   }
 
+  const LATEST_GUIDE_CARDS = [
+    { href: "review.html", prefix: "home.latestCard1" },
+    { href: "haul.html", prefix: "home.latestCard2" },
+    { href: "qc.html", prefix: "home.latestCard3" },
+    { href: "shipping-checklist.html", prefix: "home.latestCard4" }
+  ];
+
+  function latestGuideCardHtml(card) {
+    return `
+      <a href="${escapeAttr(card.href)}" class="guide-card">
+        <span class="guide-card-kicker" data-i18n="${card.prefix}Kicker">${escapeHtml(I18N.en[`${card.prefix}Kicker`])}</span>
+        <h3 data-i18n="${card.prefix}Title">${escapeHtml(I18N.en[`${card.prefix}Title`])}</h3>
+        <p data-i18n="${card.prefix}Body">${escapeHtml(I18N.en[`${card.prefix}Body`])}</p>
+        <span class="guide-card-link" data-i18n="${card.prefix}Link">${escapeHtml(I18N.en[`${card.prefix}Link`])}</span>
+      </a>`;
+  }
+
+  function renderLatestGuideCards() {
+    const grid = document.querySelector(".guide-card-grid");
+    if (!grid) return;
+    grid.innerHTML = LATEST_GUIDE_CARDS.map(latestGuideCardHtml).join("");
+  }
+
   function productCountText(count) {
     const template = localizedKey("finds.count", currentLanguage) || "{count} products found";
     return template.replace("{count}", count);
@@ -1375,6 +1398,7 @@
   function initHome() {
     if (document.body.dataset.page !== "home") return;
 
+    renderLatestGuideCards();
     renderProducts(document.getElementById("popularProducts"), (window.LITBUY_PRODUCTS || []).slice(0, 6));
 
     const seoRoutes = document.getElementById("seoRoutes");
