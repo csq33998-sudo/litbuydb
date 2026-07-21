@@ -5,10 +5,14 @@
   const AFFILIATE = cfg.affiliate || "https://litbuy.com";
   const SEARCH_REDIRECT_URL = "https://streetstyle.maisonlooks.com/en/search?q=";
   const BRAND_SEARCH_URL = "https://streetstyle.maisonlooks.com/en/search?q=";
+  const ALLOWED_EXTERNAL_URL_ORIGINS = new Set([
+    "https://litbuy.com",
+    "https://streetstyle.maisonlooks.com",
+    "https://cdn.maisonlooks.com"
+  ]);
   const LANG_STORAGE_KEY = "litbuy-language";
   const LANG_OPTIONS = [
     { code: "en", label: "English", flag: "🇺🇸" },
-    { code: "zh", label: "中文", flag: "🇨🇳" },
     { code: "pl", label: "Polski", flag: "🇵🇱" },
     { code: "de", label: "Deutsch", flag: "🇩🇪" },
     { code: "fr", label: "Français", flag: "🇫🇷" },
@@ -21,19 +25,38 @@
     { code: "ar", label: "العربية", flag: "🇸🇦" },
     { code: "cs", label: "Čeština", flag: "🇨🇿" }
   ];
+  LANG_OPTIONS.splice(0, LANG_OPTIONS.length,
+    { code: "en", label: "English", flag: "EN" },
+    { code: "zh", label: "中文", flag: "ZH" },
+    { code: "pl", label: "Polski", flag: "PL" },
+    { code: "de", label: "Deutsch", flag: "DE" },
+    { code: "fr", label: "Français", flag: "FR" },
+    { code: "it", label: "Italiano", flag: "IT" },
+    { code: "pt", label: "Português", flag: "PT" },
+    { code: "es", label: "Español", flag: "ES" },
+    { code: "nl", label: "Nederlands", flag: "NL" },
+    { code: "da", label: "Dansk", flag: "DA" },
+    { code: "sv", label: "Svenska", flag: "SV" },
+    { code: "ar", label: "العربية", flag: "AR" },
+    { code: "cs", label: "Čeština", flag: "CS" }
+  );
+  const SUPPORTED_LANG_CODES = new Set(LANG_OPTIONS.map(({ code }) => code));
   let currentLanguage = "en";
   const I18N = {
     en: {
       "nav.home": "Home",
       "nav.finds": "Finds",
       "nav.resources": "Resources",
+      "nav.qc": "QC",
+      "nav.blog": "Blog",
+      "nav.new": "New",
       "nav.categories": "Categories",
       "nav.help": "Help",
       "nav.faq": "FAQ",
       "nav.language": "Language",
       "home.heroLabel": "Independent LitBuy Guide",
-      "home.heroTitle": "Discover Curated LitBuy Picks",
-      "home.heroDesc": "A simple, fast, and efficient LitBuy spreadsheet resource for finds, shopping lists, search, and category sorting, so you can browse faster and place orders through LitBuy with one click.",
+      "home.heroTitle": "LitBuy Spreadsheet for Finds, QC Photos and Source Links",
+      "home.heroDesc": "A simple LitBuy spreadsheet resource for finds, source links, QC photo checks, shopping lists, and shipping checklist steps before you place an order through LitBuy.",
       "home.products": "Products",
       "home.updated": "Updated",
       "home.shoppers": "Shoppers",
@@ -45,6 +68,14 @@
       "home.searchPlaceholder": "Search LitBuy finds...",
       "home.categoriesLabel": "Categories",
       "home.categoriesTitle": "Browse LitBuy Finds Categories",
+      "home.categoryProductsLabel": "StreetStyle product routes",
+      "home.categoryProductsTitle": "Open a product card, then view the exact item.",
+      "home.categoryProductsSubtitle": "Each card links to the matching StreetStyle product detail page, not a broad category page.",
+      "home.categoryProductKicker": "LITBUY SPREADSHEET CATEGORY",
+      "home.viewAllCategories": "View all categories",
+      "home.openCategoryProducts": "Open products",
+      "home.categoryPriceRange": "Price range",
+      "home.categoryQcNote": "QC note",
       "home.guideLabel": "LitBuy Guide",
       "home.guideTitle": "What is LitBuy Spreadsheet and how do shoppers use it?",
       "home.guideBody1": "LitBuy is a China shopping agent used by international shoppers to browse products from marketplaces such as Taobao, Weidian, and 1688. Instead of ordering directly from sellers, shoppers can use LitBuy to place a purchase request, receive warehouse quality-check photos, combine multiple items into one parcel, and choose an international shipping line.",
@@ -83,12 +114,12 @@
       "home.startSubtitle": "Use this site as a practical route map before placing an order. The goal is to move from product discovery to QC review without wasting time on scattered links.",
       "home.startStep1Title": "Browse LitBuy Spreadsheet",
       "home.startStep1Body": "Start with curated categories, popular product routes, and brand shortcuts for Taobao, Weidian, and 1688 finds.",
-      "home.startStep2Title": "Open a Product Link",
-      "home.startStep2Body": "Compare product names, categories, and route pages before opening the LitBuy or MaisonLooks ordering page.",
+      "home.startStep2Title": "Open Source Links",
+      "home.startStep2Body": "Compare source links, product names, categories, seller notes, and live listing details before opening the LitBuy ordering page.",
       "home.startStep3Title": "Order Through LitBuy",
       "home.startStep3Body": "Use LitBuy to submit the item, manage warehouse intake, combine parcels, and prepare international shipping.",
-      "home.startStep4Title": "Check QC Photos",
-      "home.startStep4Body": "Review warehouse photos, confirm sizing and quality, then choose a shipping line for your haul.",
+      "home.startStep4Title": "Check QC Photos and Shipping",
+      "home.startStep4Body": "Review warehouse photos, confirm sizing and quality, then use a shipping checklist before choosing a line for your haul.",
       "home.latestLabel": "Latest Guides",
       "home.latestTitle": "LitBuy shopping guides for beginners",
       "home.latestSubtitle": "Short resource pages for the questions shoppers usually ask before building a haul.",
@@ -103,6 +134,9 @@
       "footer.spreadsheetLinks": "Spreadsheet Links",
       "footer.categories": "Categories",
       "footer.review": "LitBuy Review",
+      "footer.qc": "LitBuy QC",
+      "footer.blog": "LitBuy Blog",
+      "footer.new": "LitBuy New",
       "footer.haul": "Haul Guide",
       "footer.alternatives": "Alternatives",
       "footer.help": "Help",
@@ -228,7 +262,7 @@
       "product.browseCategory": "Browse Category",
       "product.defaultDesc": "Selected LitBuy route for shoppers who want a fast product preview before opening LitBuy.",
       "finds.title": "LitBuy Finds",
-      "finds.subtitle": "Browse curated products with search, filters, and direct LitBuy purchase links.",
+      "finds.subtitle": "Browse curated products with search, filters, source links, QC photo reminders, and direct LitBuy purchase links.",
       "finds.searchPlaceholder": "Search products, brands...",
       "finds.searchAria": "Search products",
       "finds.filterAria": "Filter by category",
@@ -244,22 +278,22 @@
       "home.latestCard2Title": "Planning a LitBuy haul",
       "home.latestCard2Body": "Use spreadsheet routes to organize shoes, hoodies, jackets, accessories, and other finds before shipping.",
       "home.latestCard2Link": "Read guide →",
-      "home.latestCard3Kicker": "Finds Guide",
-      "home.latestCard3Title": "Best categories to browse first",
-      "home.latestCard3Body": "Start with high-demand routes like shoes, streetwear, bags, accessories, and budget-friendly basics.",
-      "home.latestCard3Link": "Open finds →",
-      "home.latestCard4Kicker": "Compare Guide",
-      "home.latestCard4Title": "LitBuy alternatives and agent comparison",
-      "home.latestCard4Body": "Compare LitBuy with other shopping agents before choosing where to order and ship your items.",
-      "home.latestCard4Link": "Compare agents →",
+      "home.latestCard3Kicker": "QC Guide",
+      "home.latestCard3Title": "How to check LitBuy QC photos",
+      "home.latestCard3Body": "Use warehouse photos to confirm color, sizing details, visible defects, packaging, and shipping risks before submitting a parcel.",
+      "home.latestCard3Link": "Open QC guide →",
+      "home.latestCard4Kicker": "Shipping Checklist",
+      "home.latestCard4Title": "Check a LitBuy haul before shipping",
+      "home.latestCard4Body": "Review QC photos, source links, restrictions, parcel weight, packaging, address details, and tracking steps before paying freight.",
+      "home.latestCard4Link": "Open checklist →",
       "home.seoBody1": "The LitBuy Spreadsheet is designed as a practical shopping index for international buyers who want to discover product ideas before placing an order. Instead of searching through scattered posts, old seller links, or disconnected marketplace pages, shoppers can start with organized categories, brand routes, and curated finds.",
-      "home.seoBody2": "Each section is written around the way people actually search: LitBuy finds, product spreadsheets, shopping agent reviews, hauls, QC photos, Taobao links, Weidian links, 1688 routes, and category-specific items like shoes, hoodies, jackets, bags, and accessories.",
+      "home.seoBody2": "Each section is written around the way people actually search: LitBuy finds, product spreadsheets, source links, shopping agent reviews, hauls, QC photos, Taobao links, Weidian links, 1688 routes, shipping checklist steps, and category-specific items like shoes, hoodies, jackets, bags, and accessories.",
       "home.seoBody3": "This site is independent and informational. Product checkout, QC review, warehouse storage, and international shipping are handled through LitBuy.com or the linked shopping pages. Our role is to make discovery faster and give each shopper a clearer path from keyword search to order preparation.",
       "home.browseTitle": "What you can browse",
       "home.browse1": "Curated LitBuy finds and category routes",
       "home.browse2": "Spreadsheet-style product shortcuts",
       "home.browse3": "Shopping guide and review content",
-      "home.browse4": "Haul planning and QC-focused tips",
+      "home.browse4": "Haul planning, QC-focused tips, and shipping checklist steps",
       "home.browse5": "Agent comparison and alternative pages",
       "home.compareCard1Title": "LitBuy vs other agents",
       "home.compareCard1Body": "Use the alternatives page to compare shopping agent workflows, discovery routes, QC handling, warehouse steps, and shipping considerations.",
@@ -299,7 +333,7 @@
       "haul.item3": "<strong>Budget Pickup</strong> - Under CNY 200 finds across shoes and T-shirts",
       "haul.cta": "Ready to build your own haul? Start browsing <a href=\"finds.html\" style=\"color:var(--accent)\">LitBuy Finds</a> or paste a product link directly on <a href=\"https://litbuy.com\" style=\"color:var(--accent)\" target=\"_blank\" rel=\"noopener noreferrer\">LitBuy.com</a>.",
       "spreadsheet.title": "LitBuy Spreadsheet Links",
-      "spreadsheet.subtitle": "Use this page as the central index for LitBuy finds, category routes, shopping guides, and product discovery shortcuts.",
+      "spreadsheet.subtitle": "Use this page as the central index for LitBuy finds, source links, category routes, QC photo guides, shipping checklist steps, and product discovery shortcuts.",
       "spreadsheet.indexLabel": "Spreadsheet Index",
       "spreadsheet.indexTitle": "Browse curated LitBuy spreadsheet routes",
       "spreadsheet.card.finds": "All LitBuy Finds",
@@ -307,12 +341,15 @@
       "spreadsheet.card.categories": "Category Spreadsheet",
       "spreadsheet.card.categoriesCta": "Open categories →",
       "spreadsheet.card.reviewCta": "Read guide →",
+      "spreadsheet.card.qcCta": "Check QC guide →",
+      "spreadsheet.card.blogCta": "Read blog →",
+      "spreadsheet.card.newCta": "Open new route →",
       "spreadsheet.card.haul": "Haul Planning",
       "spreadsheet.card.haulCta": "Plan a haul →",
       "spreadsheet.howLabel": "How It Works",
       "spreadsheet.whatTitle": "What is a LitBuy Spreadsheet?",
-      "spreadsheet.body1": "A LitBuy Spreadsheet is an organized product discovery resource for shoppers who want quick access to finds, categories, brands, and shopping guide links before ordering through a China shopping agent.",
-      "spreadsheet.body2": "This index focuses on practical routes for Taobao, Weidian, and 1688 discovery. Start with a category, compare product ideas, then open the related LitBuy or MaisonLooks page when you are ready to prepare an order.",
+      "spreadsheet.body1": "A LitBuy Spreadsheet is an organized product discovery resource for shoppers who want quick access to finds, categories, brands, source links, and shopping guide links before ordering through a China shopping agent.",
+      "spreadsheet.body2": "This index focuses on practical routes for Taobao, Weidian, and 1688 discovery. Start with a category, compare product ideas, check source links, then open the related LitBuy page when you are ready to prepare an order.",
       "spreadsheet.startTitle": "Best starting points",
       "spreadsheet.startBody": "Most shoppers begin with shoes, hoodies, T-shirts, jackets, bags, accessories, and budget basics before building a larger haul.",
       "spreadsheet.beforeTitle": "Before ordering",
@@ -531,9 +568,96 @@
     I18N[lang] = Object.assign(I18N[lang] || {}, EXTRA_I18N[lang]);
   });
 
+  const I18N_NATIVE_KEYS = {};
+  Object.keys(I18N).forEach((lang) => {
+    I18N_NATIVE_KEYS[lang] = new Set(Object.keys(I18N[lang] || {}));
+  });
+
   LANG_OPTIONS.forEach(({ code }) => {
     I18N[code] = Object.assign({}, I18N.en, I18N[code] || {});
   });
+
+  Object.assign(I18N.en, {
+    "footer.sourceLinks": "Source Links",
+    "footer.shippingChecklist": "Shipping Checklist"
+  });
+  Object.assign(I18N.zh, {
+    "footer.sourceLinks": "源链接",
+    "footer.shippingChecklist": "运输清单",
+    "nav.qc": "QC",
+    "nav.blog": "博客",
+    "nav.new": "最新",
+    "footer.qc": "LitBuy QC",
+    "footer.blog": "LitBuy 博客",
+    "footer.new": "LitBuy 最新"
+  });
+
+  const ORIGINAL_PAGE_HTML = new WeakMap();
+  const PAGE_I18N = {
+    zh: {
+      "qc.html": `
+    <h1>LitBuy QC 照片指南</h1>
+    <p>QC 是质量检查。对 LitBuy 订单来说，最关键的 QC 节点通常发生在卖家把商品发到 LitBuy 仓库之后、买家提交国际包裹之前。本页帮助你阅读仓库照片、核对商品细节，并避免常见下单错误。</p>
+    <section class="review-summary" aria-label="LitBuy QC summary">
+      <div><span class="review-kicker">服务事实</span><strong>免费 QC 和验货照片</strong><p>LitBuy 公开服务信息提到 Free QC &amp; Inspection，商品到仓后会检查并提供验货照片。</p></div>
+      <div><span class="review-kicker">最佳用途</span><strong>发货前确认</strong><p>用 QC 照片核对颜色、尺码标、可见瑕疵、包装，以及商品是否符合订单备注。</p></div>
+      <div><span class="review-kicker">限制</span><strong>降低风险，不消除风险</strong><p>仓库照片可以发现明显问题，但不能保证上身尺码、面料手感、长期耐用度、清关结果或售后处理。</p></div>
+    </section>
+    <div class="review-cta-row"><a href="finds.html" class="btn btn-secondary">浏览 LitBuy 好物</a><a href="review.html" class="btn btn-secondary">阅读 LitBuy 评测</a><a href="https://litbuy.com/" class="btn btn-primary" target="_blank" rel="noopener noreferrer">打开 LitBuy.com</a></div>
+    <h2>平台确认了什么</h2>
+    <p>LitBuy 将自己描述为中国购物代理，公开应用文案提到 1688、Taobao、Weidian、JD 等商品来源，也提到仓储、QC 检查和加固包装。对 QC 来说，重点是：检查发生在商品到仓之后。</p>
+    <p>你应该在提交国际包裹前决定发货、退货或换货，因为一旦进入国际运输，成本和售后难度都会增加。</p>
+    <h2>如何阅读 LitBuy QC 照片</h2>
+    <ol class="review-steps"><li><strong>核对订单基础信息。</strong>检查标题、颜色、尺码、数量、卖家备注和变体选项。</li><li><strong>检查可见细节。</strong>放大查看 logo、走线、印花、标签、五金、鞋底、拉链、纽扣和包装状态。</li><li><strong>留意运输风险。</strong>重盒、易碎件、液体、电池、磁铁、超大包装都会影响线路和价格。</li><li><strong>提交包裹前处理问题。</strong>如果照片显示异常，先要求说明、退换或补拍，不要急着支付国际运费。</li><li><strong>保留记录。</strong>保存原商品链接、卖家消息、订单备注和 QC 照片，方便后续支持。</li></ol>
+    <h2>QC 检查流程</h2>
+    <div class="pros-cons-grid"><section class="pros-cons-card"><h3>QC 适合用于</h3><ul><li>确认仓库商品是否匹配所选规格。</li><li>发现明显污渍、划痕、错印、缺件或包装损坏。</li><li>发国际货前对比卖家图和仓库图。</li><li>判断是否值得退换、补拍或等待。</li></ul></section><section class="pros-cons-card"><h3>QC 不等于</h3><ul><li>保证尺码一定适合。</li><li>保证清关、时效或税费可预测。</li><li>替代阅读原商品页和卖家规则。</li><li>忽略限制品、线路规则或支付政策的理由。</li></ul></section></div>
+    <h2>常见 QC 错误</h2>
+    <ul><li>没有核对尺码和颜色就快速通过。</li><li>只看正面图，忽略标签、鞋底、袖口、背面和细节。</li><li>发现仓库问题后太晚申请退换。</li><li>只看商品价，忽略重量、体积、优惠券和线路限制。</li></ul>`,
+      "source-links.html": `
+    <h1>LitBuy 源链接指南</h1>
+    <p>源链接是买家下 LitBuy 订单前需要核对的商品路径，可能是商品页、分类页、卖家页，或指向 Taobao、Weidian、1688、JD 等平台的表格行。本页说明如何在下单前验证这些链接。</p>
+    <section class="review-summary" aria-label="LitBuy source links summary"><div><span class="review-kicker">搜索意图</span><strong>LitBuy source links</strong><p>用源链接从 LitBuy 好物或表格行进入真实商品信息。</p></div><div><span class="review-kicker">下单前</span><strong>检查实时商品页</strong><p>确认价格、库存、颜色、尺码、国内运费、卖家备注、商品图和退换规则。</p></div><div><span class="review-kicker">到仓后</span><strong>对比 QC 照片</strong><p>用仓库 QC 照片和原始源链接、订单备注进行对照。</p></div></section>
+    <div class="review-cta-row"><a href="finds.html" class="btn btn-secondary">浏览 LitBuy 好物</a><a href="spreadsheet.html" class="btn btn-secondary">打开表格链接</a><a href="shipping-checklist.html" class="btn btn-primary">打开运输清单</a></div>
+    <h2>什么是源链接？</h2><p>源链接是商品想法背后的原始路径。对 LitBuy 买家来说，它通常是商品 URL、卖家页、店铺路线或市场列表。表格条目只有在源链接仍然有效且与商品标签一致时才有价值。</p>
+    <h2>源链接检查清单</h2><ol class="review-steps"><li><strong>打开当前链接。</strong>确认链接仍然可访问，并指向预期商品。</li><li><strong>确认商品选项。</strong>核对标题、颜色、尺码、数量、批次、版本和备注。</li><li><strong>检查价格和库存。</strong>价格、国内运费、优惠和库存都可能变化。</li><li><strong>查看卖家信息。</strong>关注清晰照片、更新情况、退换规则、尺寸、材质和包装说明。</li><li><strong>保存 QC 上下文。</strong>保留源链接和订单备注，方便到仓后核对 QC 照片。</li></ol>
+    <h2>Taobao、Weidian 和 1688 源链接</h2><div class="pros-cons-grid"><section class="pros-cons-card"><h3>Taobao 源链接</h3><p>检查规格选择、尺码表、卖家图、备注、国内运费和商品信息完整度。</p></section><section class="pros-cons-card"><h3>Weidian 源链接</h3><p>重点看批次说明、店铺背景、相册、尺码选项和卖家更新。</p></section><section class="pros-cons-card"><h3>1688 源链接</h3><p>检查起订规则、颜色尺码、工厂图、国内运费，以及是否适合个人购买。</p></section><section class="pros-cons-card"><h3>表格源链接</h3><p>把每条表格路线当作起点。付款前验证实时链接，发货前再用 QC 照片确认。</p></section></div>
+    <h2>源链接和 QC 照片</h2><p>源链接给出预期，QC 照片展示到仓实物。发货前要把仓库照片与商品标题、颜色、尺码、标签、可见细节和卖家图片对比。如果不一致，先联系支持再提交国际包裹。</p>`,
+      "shipping-checklist.html": `
+    <h1>LitBuy 运输清单</h1>
+    <p>提交 LitBuy 包裹或支付国际运费前使用这份清单。它把完整流程串起来：LitBuy 好物、源链接、订单备注、仓库 QC 照片、包裹限制、线路选择、地址信息和追踪。</p>
+    <section class="review-summary" aria-label="LitBuy shipping checklist summary"><div><span class="review-kicker">第一步</span><strong>复查 QC 照片</strong><p>确认颜色、尺码、数量、标签、瑕疵、包装，以及商品是否匹配源链接。</p></div><div><span class="review-kicker">第二步</span><strong>检查包裹规则</strong><p>比较线路限制、估重、体积、包装、目的地覆盖、追踪和时效。</p></div><div><span class="review-kicker">第三步</span><strong>确认运输信息</strong><p>核对地址、申报信息、包裹选项、付款金额、追踪号和售后记录。</p></div></section>
+    <div class="review-cta-row"><a href="qc.html" class="btn btn-secondary">阅读 QC 照片指南</a><a href="source-links.html" class="btn btn-secondary">检查源链接</a><a href="finds.html" class="btn btn-primary">浏览 LitBuy 好物</a></div>
+    <h2>提交包裹前</h2><ol class="review-steps"><li><strong>用源链接对比 QC 照片。</strong>确认仓库实物符合预期商品、颜色、尺码和细节。</li><li><strong>检查每件商品状态。</strong>仍需退换、说明、补拍或客服跟进的商品不要加入包裹。</li><li><strong>估算重量和体积。</strong>商品价不是总成本，重量、箱规和线路规则会影响运费。</li><li><strong>必要时去除包装。</strong>对大体积包装，判断是否需要去盒或加固。</li><li><strong>分开风险商品。</strong>电子、电池、液体、磁铁、易碎品、超大盒和品牌商品可能受不同线路限制。</li></ol>
+    <h2>运输线路清单</h2><div class="pros-cons-grid"><section class="pros-cons-card"><h3>费用和重量</h3><p>比较估重、体积重、处理选项、优惠券，以及最便宜线路是否适合商品类型。</p></section><section class="pros-cons-card"><h3>限制</h3><p>阅读目的地、限制品、清关要求、申报价值、包裹尺寸和禁运品规则。</p></section><section class="pros-cons-card"><h3>时效和追踪</h3><p>比较预计时效、追踪质量、线路稳定性、支持预期和是否赶时间。</p></section><section class="pros-cons-card"><h3>地址和支持</h3><p>确认姓名、电话、完整地址、邮编、包裹号，以及需要客服处理时的截图。</p></section></div>
+    <h2>支付运费后</h2><ul><li>保存包裹号、线路、付款金额、商品列表、QC 照片和源链接。</li><li>发出后持续追踪，异常时保留截图。</li><li>账户、支付、包裹、派送、退款或售后问题请走 LitBuy 官方支持。</li></ul>`,
+      "new.html": `
+    <h1>LitBuy 最新</h1><p>本页跟踪 LitBuy 发现流程中的最新实用路线：新的表格主题、近期 LitBuyDocs 文章、新手指南、分类更新和购物思路。它是独立更新中心，不是官方公告页。</p>
+    <section class="review-summary" aria-label="LitBuy new summary"><div><span class="review-kicker">参考事实</span><strong>LitBuyDocs 发布近期文章</strong><p>公开博客显示近期文章、热门标签和分页，主题包括表格、好物、球衣、帽衫和店铺。</p></div><div><span class="review-kicker">平台事实</span><strong>新手指南和活动中心</strong><p>LitBuy 公开应用文案包含 New User Guide、Activity Center、Help Center，以及 1688、Taobao、Weidian、JD 商品来源入口。</p></div><div><span class="review-kicker">最佳用途</span><strong>下单前检查新想法</strong><p>先用本页决定下一步浏览什么，再确认实时商品、卖家规则、价格、库存和运输限制。</p></div></section>
+    <div class="review-cta-row"><a href="finds.html" class="btn btn-secondary">浏览最新好物</a><a href="blog.html" class="btn btn-secondary">阅读博客</a><a href="litbuy-latest-finds.html" class="btn btn-primary">查看最新好物</a></div>
+    <h2>最新 LitBuy 更新路线</h2><p>这里不是普通博客文章，而是给买家快速查看的新路线索引：近期表格主题、新分类需求、可见指南主题和会影响当前订单的操作提醒。</p>
+    <div class="pros-cons-grid"><section class="pros-cons-card"><h3>近期文章信号</h3><p>优先关注表格新手指南、可信卖家、购买指南、批次路线和小众风格主题。</p></section><section class="pros-cons-card"><h3>需要刷新的分类</h3><p>优先更新球鞋、帽衫、球衣、T 恤、夹克、裤子、包、配饰、手表、电子和优惠路线。</p></section><section class="pros-cons-card"><h3>新买家提醒</h3><p>刷新商品链接下单、实时页面验证、尺码颜色备注、QC 照片、仓储、合包和运输限制内容。</p></section><section class="pros-cons-card"><h3>更新节奏</h3><p>新路线应每周复查，因为链接、库存、价格和 QC 结果都会变化。</p></section></div>
+    <h2>如何评估新的 LitBuy 好物</h2><ol class="review-steps"><li><strong>从当前来源开始。</strong>使用近期文章、本站表格、分类页或实时市场链接。</li><li><strong>确认实时信息。</strong>检查价格、库存、尺码表、颜色、国内运费、卖家备注和退换规则。</li><li><strong>保存清晰路线。</strong>只保留信息明确、分类合理、便于比较的链接。</li><li><strong>下单前规划。</strong>重量、体积、包装、限制品和目的地都会影响是否值得加入 haul。</li></ol>`,
+      "litbuy-latest-finds.html": `
+    <h1>LitBuy 最新好物</h1><p>这是面向想快速查看新商品路线的独立索引页，重点是分类更新、预算好物、卖家路线和每周表格刷新优先级。</p>
+    <section class="review-summary" aria-label="LitBuy latest finds summary"><div><span class="review-kicker">近期需求</span><strong>表格、卖家、批次、风格</strong><p>公开文章显示买家关注表格指南、可信卖家、购买指南、批次和小众风格路线。</p></div><div><span class="review-kicker">优先刷新</span><strong>球鞋、帽衫、球衣、配饰</strong><p>这些分类在导航、标签和搜索行为中反复出现，是最新好物的实用起点。</p></div><div><span class="review-kicker">发货前</span><strong>下单前验证实时页面</strong><p>新好物只有在商品详情、卖家备注、价格、库存、规格和运输限制都确认后才有价值。</p></div></section>
+    <h2>最新分类路线</h2><div class="pros-cons-grid"><section class="pros-cons-card"><h3>最新球鞋好物</h3><p>按鞋型、配色、尺码、卖家备注、价格段和详情完整度刷新。</p></section><section class="pros-cons-card"><h3>最新帽衫好物</h3><p>优先选择尺码、面料、logo、颜色和季节需求清晰的路线。</p></section><section class="pros-cons-card"><h3>最新足球球衣</h3><p>按球队、赛季、球员名、章标、尺码和版本区分路线。</p></section><section class="pros-cons-card"><h3>最新包和配饰</h3><p>更新照片、尺寸、材质和包装信息足够清楚的包、腰带、帽子、钱包、首饰和手表路线。</p></section><section class="pros-cons-card"><h3>最新预算好物</h3><p>按真实总成本分组，不只看商品价；国内运费、重量和线路也会影响价值。</p></section><section class="pros-cons-card"><h3>最新卖家和店铺路线</h3><p>当卖家分类稳定、更新及时、备注清楚且便于比较时再保留。</p></section></div>
+    <h2>每周更新清单</h2><ol class="review-steps"><li><strong>移除失效行。</strong>删除商品页失效、库存不清或标签不匹配的路线。</li><li><strong>刷新高需求分类。</strong>优先球鞋、帽衫、球衣、包、配饰、手表、电子和预算基础款。</li><li><strong>检查实时详情。</strong>确认价格、颜色、尺码、数量、国内运费、商品图和卖家备注。</li><li><strong>分开预算和高价路线。</strong>不要把低价基础款、批次商品和高价商品混在同一列表。</li><li><strong>用 QC 做最终确认。</strong>下单后用仓库照片确认，再决定是否国际发货。</li></ol>`,
+      "litbuy-blog-article.html": `
+    <h1>LitBuy 博客文章：表格、QC 和购物指南主题</h1><p>这篇独立文章基于公开 LitBuyDocs Blog 研究，涵盖表格性能、新手指南、可信卖家、购买指南、批次选择、风格主题和小众购物主题。</p>
+    <h2>LitBuy Spreadsheet：快速加载大型表格</h2><p>大型表格容易变慢且难以浏览。好的 LitBuy 表格应按分类、品牌、商品类型、价格预期、QC 意图和购物目的组织路线。</p>
+    <h2>表格新手指南</h2><p>新手流程应保持简单：选择商品路线，验证实时链接，提交准确尺码和颜色备注，等待入仓，检查 QC 照片，再决定是否加入国际包裹。</p>
+    <h2>购物检查主题</h2><p>表格链接只是发现工具。实用指南应帮助买家比较实时商品详情、卖家备注、商品图、分类适配度，以及路线是否值得保存。</p>
+    <h2>可信卖家和购买指南主题</h2><p>可信卖家和购买指南只能作为起点，不是保证。仍需检查页面详情、库存、退换规则、国内运费、限制品、QC 照片和最终包裹成本。</p>
+    <h2>风格和小众表格主题</h2><p>Old Money、Lego、best batch、best finds 等主题说明买家常从风格、细分品类或批次开始搜索，再比较路线和平台流程。</p>`,
+      "blog.html": `
+    <h1>LitBuy 博客</h1><p>本页根据公开 LitBuyDocs 和 LitBuy 平台信息整理，围绕表格好物、TikTok 好物、足球球衣、帽衫、店铺链接、时尚分类和购物技巧，为买家提供下单前的实用路线。</p>
+    <section class="review-summary" aria-label="LitBuy blog summary"><div><span class="review-kicker">参考站点事实</span><strong>LitBuyDocs 有博客板块</strong><p>公开页面展示近期文章、热门标签和商品/指南分类。</p></div><div><span class="review-kicker">近期主题模式</span><strong>表格、TikTok 好物、球衣、帽衫</strong><p>可见文章集中在发现型内容，如表格指南、TikTok 好物、球衣、帽衫、优质店铺和免运主题。</p></div><div><span class="review-kicker">适合读者</span><strong>准备 haul 的表格买家</strong><p>当你从商品发现进入订单备注、QC、仓储、合包和国际运输时，可以用本页规划路径。</p></div></section>
+    <div class="review-cta-row"><a href="finds.html" class="btn btn-secondary">浏览 LitBuy 好物</a><a href="qc.html" class="btn btn-secondary">阅读 QC 指南</a><a href="litbuy-blog-article.html" class="btn btn-primary">阅读博客文章</a></div>
+    <h2>参考博客文章</h2><p>本节把公开博客中可见的文章主题整理成本地阅读索引，帮助买家进行 LitBuy 风格的发现、表格研究、卖家评估和购物清单规划。</p>
+    <div class="pros-cons-grid"><section class="pros-cons-card"><h3>大型表格加载</h3><p>保持表格路线按分类、品牌、商品类型和搜索意图组织，避免打开无关链接。</p></section><section class="pros-cons-card"><h3>表格新手指南</h3><p>阅读表格行、检查商品详情，并从发现阶段进入代理下单。</p></section><section class="pros-cons-card"><h3>购物检查指南</h3><p>验证实时页面、阅读卖家备注、比较详情，并保存清晰路线。</p></section><section class="pros-cons-card"><h3>可信卖家主题</h3><p>可信卖家只能作为起点，仍需检查详情、退换、QC 和运输限制。</p></section></div>
+    <h2>下单前如何使用博客内容</h2><ol class="review-steps"><li><strong>用于发现。</strong>从表格、TikTok、分类、店铺或优惠文章寻找商品想法。</li><li><strong>验证实时页面。</strong>确认价格、尺码、颜色、国内运费、库存和卖家备注。</li><li><strong>围绕 QC 规划。</strong>到仓后用 QC 照片确认商品。</li><li><strong>注意仓储时间。</strong>规划合包，避免长期占用仓储。</li><li><strong>发货前检查限制。</strong>服饰、鞋、电子、液体、电池、大包装和易碎品都可能影响线路。</li></ol>`
+    }
+  };
 
   function buyUrl(product) {
     return AFFILIATE + (product ? "?product=" + encodeURIComponent(product.name) : "");
@@ -544,9 +668,139 @@
     return messages[key] || I18N.en[key] || "";
   }
 
+  const ORIGINAL_TEXT_NODES = new WeakMap();
+  const ORIGINAL_ATTRS = new WeakMap();
+  const ORIGINAL_TITLE = document.title;
+  const TRANSLATABLE_META_SELECTORS = [
+    'meta[name="description"]',
+    'meta[name="keywords"]',
+    'meta[property="og:title"]',
+    'meta[property="og:description"]',
+    'meta[name="twitter:title"]',
+    'meta[name="twitter:description"]'
+  ];
+
+  const LANGUAGE_TERM_MAP = {
+    zh: {
+      "LitBuy Spreadsheet": "LitBuy 表格", "LitBuy Finds": "LitBuy 好物", "Source Links": "源链接", "Shipping Checklist": "运输清单", "QC Photos": "QC 照片", "QC photos": "QC 照片", "QC photo": "QC 照片", "quality-check": "质检", "shopping guide": "购物指南", "shopping agent": "购物代理", "product discovery": "商品发现", "product routes": "商品路线", "category routes": "分类路线", "source link": "源链接", "source links": "源链接", "shipping line": "运输线路", "warehouse": "仓库", "parcel": "包裹", "hauls": "拼单", "haul": "拼单", "finds": "好物", "spreadsheet": "表格", "categories": "分类", "category": "分类", "products": "商品", "product": "商品", "brand": "品牌", "brands": "品牌", "review": "评测", "guide": "指南", "blog": "博客", "help": "帮助", "privacy": "隐私", "terms": "条款", "resources": "资源", "new": "最新", "popular": "热门", "latest": "最新", "browse": "浏览", "open": "打开", "read": "阅读", "search": "搜索", "check": "检查", "compare": "比较", "before ordering": "下单前", "before shipping": "发货前", "international shipping": "国际运输", "Taobao": "Taobao", "Weidian": "Weidian", "1688": "1688", "seller": "卖家", "sellers": "卖家", "order": "订单", "orders": "订单", "support": "支持", "cost": "成本", "price": "价格", "stock": "库存", "size": "尺码", "color": "颜色", "notes": "备注", "details": "详情", "items": "商品", "item": "商品", "route": "路线", "routes": "路线", "workflow": "流程", "checklist": "清单", "photos": "照片", "photo": "照片", "shipping": "运输"
+    },
+    pl: {
+      "LitBuy Spreadsheet": "Arkusz LitBuy", "LitBuy Finds": "Znaleziska LitBuy", "Source Links": "Linki zrodlowe", "Shipping Checklist": "Lista wysylki", "QC Photos": "Zdjecia QC", "QC photos": "zdjecia QC", "shopping guide": "poradnik zakupowy", "shopping agent": "agent zakupowy", "product discovery": "odkrywanie produktow", "product routes": "sciezki produktow", "category routes": "sciezki kategorii", "source link": "link zrodlowy", "source links": "linki zrodlowe", "shipping line": "linia wysylki", "warehouse": "magazyn", "parcel": "paczka", "hauls": "haul", "haul": "haul", "finds": "znaleziska", "spreadsheet": "arkusz", "categories": "kategorie", "category": "kategoria", "products": "produkty", "product": "produkt", "brand": "marka", "brands": "marki", "review": "recenzja", "guide": "poradnik", "blog": "blog", "help": "pomoc", "privacy": "prywatnosc", "terms": "warunki", "resources": "zasoby", "new": "nowe", "popular": "popularne", "latest": "najnowsze", "browse": "przegladaj", "open": "otworz", "read": "czytaj", "search": "szukaj", "check": "sprawdz", "compare": "porownaj", "before ordering": "przed zamowieniem", "before shipping": "przed wysylka", "international shipping": "wysylka miedzynarodowa", "seller": "sprzedawca", "sellers": "sprzedawcy", "order": "zamowienie", "orders": "zamowienia", "support": "wsparcie", "cost": "koszt", "price": "cena", "stock": "stan", "size": "rozmiar", "color": "kolor", "notes": "notatki", "details": "szczegoly", "items": "rzeczy", "item": "rzecz", "route": "sciezka", "routes": "sciezki", "workflow": "proces", "checklist": "lista", "photos": "zdjecia", "photo": "zdjecie", "shipping": "wysylka"
+    },
+    de: {
+      "LitBuy Spreadsheet": "LitBuy Tabelle", "LitBuy Finds": "LitBuy Funde", "Source Links": "Quelllinks", "Shipping Checklist": "Versand-Checkliste", "QC Photos": "QC-Fotos", "QC photos": "QC-Fotos", "shopping guide": "Einkaufsleitfaden", "shopping agent": "Einkaufsagent", "product discovery": "Produktsuche", "product routes": "Produktrouten", "category routes": "Kategorierouten", "source link": "Quelllink", "source links": "Quelllinks", "shipping line": "Versandlinie", "warehouse": "Lager", "parcel": "Paket", "hauls": "Hauls", "haul": "Haul", "finds": "Funde", "spreadsheet": "Tabelle", "categories": "Kategorien", "category": "Kategorie", "products": "Produkte", "product": "Produkt", "brand": "Marke", "brands": "Marken", "review": "Bewertung", "guide": "Leitfaden", "blog": "Blog", "help": "Hilfe", "privacy": "Datenschutz", "terms": "Bedingungen", "resources": "Ressourcen", "new": "Neu", "popular": "beliebt", "latest": "neueste", "browse": "durchsuchen", "open": "oeffnen", "read": "lesen", "search": "suchen", "check": "pruefen", "compare": "vergleichen", "before ordering": "vor der Bestellung", "before shipping": "vor dem Versand", "international shipping": "internationaler Versand", "seller": "Verkaeufer", "sellers": "Verkaeufer", "order": "Bestellung", "orders": "Bestellungen", "support": "Support", "cost": "Kosten", "price": "Preis", "stock": "Bestand", "size": "Groesse", "color": "Farbe", "notes": "Notizen", "details": "Details", "items": "Artikel", "item": "Artikel", "route": "Route", "routes": "Routen", "workflow": "Ablauf", "checklist": "Checkliste", "photos": "Fotos", "photo": "Foto", "shipping": "Versand"
+    },
+    fr: {
+      "LitBuy Spreadsheet": "Tableur LitBuy", "LitBuy Finds": "Trouvailles LitBuy", "Source Links": "Liens source", "Shipping Checklist": "Liste d'expedition", "QC Photos": "Photos QC", "QC photos": "photos QC", "shopping guide": "guide d'achat", "shopping agent": "agent d'achat", "product discovery": "decouverte de produits", "product routes": "routes produit", "category routes": "routes categorie", "source link": "lien source", "source links": "liens source", "shipping line": "ligne d'expedition", "warehouse": "entrepot", "parcel": "colis", "hauls": "hauls", "haul": "haul", "finds": "trouvailles", "spreadsheet": "tableur", "categories": "categories", "category": "categorie", "products": "produits", "product": "produit", "brand": "marque", "brands": "marques", "review": "avis", "guide": "guide", "blog": "blog", "help": "aide", "privacy": "confidentialite", "terms": "conditions", "resources": "ressources", "new": "nouveau", "popular": "populaire", "latest": "dernier", "browse": "parcourir", "open": "ouvrir", "read": "lire", "search": "rechercher", "check": "verifier", "compare": "comparer", "before ordering": "avant de commander", "before shipping": "avant l'expedition", "international shipping": "expedition internationale", "seller": "vendeur", "sellers": "vendeurs", "order": "commande", "orders": "commandes", "support": "support", "cost": "cout", "price": "prix", "stock": "stock", "size": "taille", "color": "couleur", "notes": "notes", "details": "details", "items": "articles", "item": "article", "route": "route", "routes": "routes", "workflow": "flux", "checklist": "liste", "photos": "photos", "photo": "photo", "shipping": "expedition"
+    },
+    it: {
+      "LitBuy Spreadsheet": "Foglio LitBuy", "LitBuy Finds": "Finds LitBuy", "Source Links": "Link sorgente", "Shipping Checklist": "Checklist spedizione", "QC Photos": "Foto QC", "QC photos": "foto QC", "shopping guide": "guida acquisti", "shopping agent": "agente acquisti", "product discovery": "scoperta prodotti", "product routes": "rotte prodotto", "category routes": "rotte categoria", "source link": "link sorgente", "source links": "link sorgente", "shipping line": "linea spedizione", "warehouse": "magazzino", "parcel": "pacco", "hauls": "haul", "haul": "haul", "finds": "finds", "spreadsheet": "foglio", "categories": "categorie", "category": "categoria", "products": "prodotti", "product": "prodotto", "brand": "brand", "brands": "brand", "review": "recensione", "guide": "guida", "blog": "blog", "help": "aiuto", "privacy": "privacy", "terms": "termini", "resources": "risorse", "new": "nuovo", "popular": "popolare", "latest": "ultimi", "browse": "sfoglia", "open": "apri", "read": "leggi", "search": "cerca", "check": "controlla", "compare": "confronta", "before ordering": "prima dell'ordine", "before shipping": "prima della spedizione", "international shipping": "spedizione internazionale", "seller": "venditore", "sellers": "venditori", "order": "ordine", "orders": "ordini", "support": "supporto", "cost": "costo", "price": "prezzo", "stock": "stock", "size": "taglia", "color": "colore", "notes": "note", "details": "dettagli", "items": "articoli", "item": "articolo", "route": "rotta", "routes": "rotte", "workflow": "flusso", "checklist": "checklist", "photos": "foto", "photo": "foto", "shipping": "spedizione"
+    },
+    pt: {
+      "LitBuy Spreadsheet": "Planilha LitBuy", "LitBuy Finds": "Achados LitBuy", "Source Links": "Links de origem", "Shipping Checklist": "Checklist de envio", "QC Photos": "Fotos QC", "QC photos": "fotos QC", "shopping guide": "guia de compras", "shopping agent": "agente de compras", "product discovery": "descoberta de produtos", "product routes": "rotas de produto", "category routes": "rotas de categoria", "source link": "link de origem", "source links": "links de origem", "shipping line": "linha de envio", "warehouse": "armazem", "parcel": "pacote", "hauls": "hauls", "haul": "haul", "finds": "achados", "spreadsheet": "planilha", "categories": "categorias", "category": "categoria", "products": "produtos", "product": "produto", "brand": "marca", "brands": "marcas", "review": "avaliacao", "guide": "guia", "blog": "blog", "help": "ajuda", "privacy": "privacidade", "terms": "termos", "resources": "recursos", "new": "novo", "popular": "popular", "latest": "mais recente", "browse": "navegar", "open": "abrir", "read": "ler", "search": "buscar", "check": "verificar", "compare": "comparar", "before ordering": "antes do pedido", "before shipping": "antes do envio", "international shipping": "envio internacional", "seller": "vendedor", "sellers": "vendedores", "order": "pedido", "orders": "pedidos", "support": "suporte", "cost": "custo", "price": "preco", "stock": "estoque", "size": "tamanho", "color": "cor", "notes": "notas", "details": "detalhes", "items": "itens", "item": "item", "route": "rota", "routes": "rotas", "workflow": "fluxo", "checklist": "checklist", "photos": "fotos", "photo": "foto", "shipping": "envio"
+    },
+    es: {
+      "LitBuy Spreadsheet": "Hoja LitBuy", "LitBuy Finds": "Hallazgos LitBuy", "Source Links": "Enlaces fuente", "Shipping Checklist": "Lista de envio", "QC Photos": "Fotos QC", "QC photos": "fotos QC", "shopping guide": "guia de compra", "shopping agent": "agente de compras", "product discovery": "descubrimiento de productos", "product routes": "rutas de producto", "category routes": "rutas de categoria", "source link": "enlace fuente", "source links": "enlaces fuente", "shipping line": "linea de envio", "warehouse": "almacen", "parcel": "paquete", "hauls": "hauls", "haul": "haul", "finds": "hallazgos", "spreadsheet": "hoja", "categories": "categorias", "category": "categoria", "products": "productos", "product": "producto", "brand": "marca", "brands": "marcas", "review": "resena", "guide": "guia", "blog": "blog", "help": "ayuda", "privacy": "privacidad", "terms": "terminos", "resources": "recursos", "new": "nuevo", "popular": "popular", "latest": "reciente", "browse": "explorar", "open": "abrir", "read": "leer", "search": "buscar", "check": "revisar", "compare": "comparar", "before ordering": "antes de pedir", "before shipping": "antes del envio", "international shipping": "envio internacional", "seller": "vendedor", "sellers": "vendedores", "order": "pedido", "orders": "pedidos", "support": "soporte", "cost": "costo", "price": "precio", "stock": "stock", "size": "talla", "color": "color", "notes": "notas", "details": "detalles", "items": "articulos", "item": "articulo", "route": "ruta", "routes": "rutas", "workflow": "flujo", "checklist": "lista", "photos": "fotos", "photo": "foto", "shipping": "envio"
+    },
+    nl: {
+      "LitBuy Spreadsheet": "LitBuy spreadsheet", "LitBuy Finds": "LitBuy vondsten", "Source Links": "Bronlinks", "Shipping Checklist": "Verzendchecklist", "QC Photos": "QC-foto's", "QC photos": "QC-foto's", "shopping guide": "winkelgids", "shopping agent": "koopagent", "product discovery": "productontdekking", "product routes": "productroutes", "category routes": "categorieroutes", "source link": "bronlink", "source links": "bronlinks", "shipping line": "verzendlijn", "warehouse": "magazijn", "parcel": "pakket", "hauls": "hauls", "haul": "haul", "finds": "vondsten", "spreadsheet": "spreadsheet", "categories": "categorieen", "category": "categorie", "products": "producten", "product": "product", "brand": "merk", "brands": "merken", "review": "review", "guide": "gids", "blog": "blog", "help": "hulp", "privacy": "privacy", "terms": "voorwaarden", "resources": "resources", "new": "nieuw", "popular": "populair", "latest": "nieuwste", "browse": "bladeren", "open": "openen", "read": "lezen", "search": "zoeken", "check": "controleren", "compare": "vergelijken", "before ordering": "voor bestellen", "before shipping": "voor verzending", "international shipping": "internationale verzending", "seller": "verkoper", "sellers": "verkopers", "order": "bestelling", "orders": "bestellingen", "support": "support", "cost": "kosten", "price": "prijs", "stock": "voorraad", "size": "maat", "color": "kleur", "notes": "notities", "details": "details", "items": "items", "item": "item", "route": "route", "routes": "routes", "workflow": "workflow", "checklist": "checklist", "photos": "foto's", "photo": "foto", "shipping": "verzending"
+    },
+    da: {
+      "LitBuy Spreadsheet": "LitBuy regneark", "LitBuy Finds": "LitBuy fund", "Source Links": "Kildelinks", "Shipping Checklist": "Forsendelsestjekliste", "QC Photos": "QC-fotos", "QC photos": "QC-fotos", "shopping guide": "shoppingguide", "shopping agent": "shoppingagent", "product discovery": "produktfund", "product routes": "produktruter", "category routes": "kategoriruter", "source link": "kildelink", "source links": "kildelinks", "shipping line": "forsendelseslinje", "warehouse": "lager", "parcel": "pakke", "hauls": "hauls", "haul": "haul", "finds": "fund", "spreadsheet": "regneark", "categories": "kategorier", "category": "kategori", "products": "produkter", "product": "produkt", "brand": "brand", "brands": "brands", "review": "anmeldelse", "guide": "guide", "blog": "blog", "help": "hjaelp", "privacy": "privatliv", "terms": "vilkar", "resources": "ressourcer", "new": "ny", "popular": "populaer", "latest": "seneste", "browse": "gennemse", "open": "abn", "read": "laes", "search": "sog", "check": "tjek", "compare": "sammenlign", "before ordering": "for bestilling", "before shipping": "for forsendelse", "international shipping": "international forsendelse", "seller": "saelger", "sellers": "saelgere", "order": "ordre", "orders": "ordrer", "support": "support", "cost": "pris", "price": "pris", "stock": "lagerstatus", "size": "storrelse", "color": "farve", "notes": "noter", "details": "detaljer", "items": "varer", "item": "vare", "route": "rute", "routes": "ruter", "workflow": "flow", "checklist": "tjekliste", "photos": "fotos", "photo": "foto", "shipping": "forsendelse"
+    },
+    sv: {
+      "LitBuy Spreadsheet": "LitBuy kalkylblad", "LitBuy Finds": "LitBuy fynd", "Source Links": "Kallankar", "Shipping Checklist": "Fraktchecklista", "QC Photos": "QC-foton", "QC photos": "QC-foton", "shopping guide": "kopguide", "shopping agent": "kopagent", "product discovery": "produktupptackt", "product routes": "produktrutter", "category routes": "kategorirutter", "source link": "kallank", "source links": "kallankar", "shipping line": "fraktlinje", "warehouse": "lager", "parcel": "paket", "hauls": "hauls", "haul": "haul", "finds": "fynd", "spreadsheet": "kalkylblad", "categories": "kategorier", "category": "kategori", "products": "produkter", "product": "produkt", "brand": "varumarke", "brands": "varumarken", "review": "recension", "guide": "guide", "blog": "blogg", "help": "hjalp", "privacy": "integritet", "terms": "villkor", "resources": "resurser", "new": "nytt", "popular": "popular", "latest": "senaste", "browse": "bladdra", "open": "oppna", "read": "las", "search": "sok", "check": "kontrollera", "compare": "jamfor", "before ordering": "fore bestallning", "before shipping": "fore frakt", "international shipping": "internationell frakt", "seller": "saljare", "sellers": "saljare", "order": "order", "orders": "ordrar", "support": "support", "cost": "kostnad", "price": "pris", "stock": "lager", "size": "storlek", "color": "farg", "notes": "anteckningar", "details": "detaljer", "items": "artiklar", "item": "artikel", "route": "rutt", "routes": "rutter", "workflow": "flode", "checklist": "checklista", "photos": "foton", "photo": "foto", "shipping": "frakt"
+    },
+    ar: {
+      "LitBuy Spreadsheet": "جدول LitBuy", "LitBuy Finds": "اكتشافات LitBuy", "Source Links": "روابط المصدر", "Shipping Checklist": "قائمة فحص الشحن", "QC Photos": "صور الفحص", "QC photos": "صور الفحص", "shopping guide": "دليل الشراء", "shopping agent": "وكيل شراء", "product discovery": "اكتشاف المنتجات", "product routes": "مسارات المنتجات", "category routes": "مسارات الفئات", "source link": "رابط المصدر", "source links": "روابط المصدر", "shipping line": "خط الشحن", "warehouse": "المستودع", "parcel": "الطرد", "hauls": "طلبات مجمعة", "haul": "طلب مجمع", "finds": "اكتشافات", "spreadsheet": "جدول", "categories": "الفئات", "category": "الفئة", "products": "المنتجات", "product": "المنتج", "brand": "العلامة", "brands": "العلامات", "review": "مراجعة", "guide": "دليل", "blog": "مدونة", "help": "مساعدة", "privacy": "الخصوصية", "terms": "الشروط", "resources": "الموارد", "new": "جديد", "popular": "شائع", "latest": "الاحدث", "browse": "تصفح", "open": "افتح", "read": "اقرا", "search": "ابحث", "check": "تحقق", "compare": "قارن", "before ordering": "قبل الطلب", "before shipping": "قبل الشحن", "international shipping": "الشحن الدولي", "seller": "البائع", "sellers": "البائعون", "order": "الطلب", "orders": "الطلبات", "support": "الدعم", "cost": "التكلفة", "price": "السعر", "stock": "المخزون", "size": "المقاس", "color": "اللون", "notes": "ملاحظات", "details": "التفاصيل", "items": "العناصر", "item": "العنصر", "route": "المسار", "routes": "المسارات", "workflow": "سير العمل", "checklist": "قائمة فحص", "photos": "صور", "photo": "صورة", "shipping": "الشحن"
+    },
+    cs: {
+      "LitBuy Spreadsheet": "Tabulka LitBuy", "LitBuy Finds": "Nalezy LitBuy", "Source Links": "Zdrojove odkazy", "Shipping Checklist": "Kontrolni seznam dopravy", "QC Photos": "QC fotky", "QC photos": "QC fotky", "shopping guide": "nakupni pruvodce", "shopping agent": "nakupni agent", "product discovery": "objevovani produktu", "product routes": "produktove trasy", "category routes": "kategoricke trasy", "source link": "zdrojovy odkaz", "source links": "zdrojove odkazy", "shipping line": "dopravni linka", "warehouse": "sklad", "parcel": "balik", "hauls": "hauly", "haul": "haul", "finds": "nalezy", "spreadsheet": "tabulka", "categories": "kategorie", "category": "kategorie", "products": "produkty", "product": "produkt", "brand": "znacka", "brands": "znacky", "review": "recenze", "guide": "pruvodce", "blog": "blog", "help": "napoveda", "privacy": "soukromi", "terms": "podminky", "resources": "zdroje", "new": "nove", "popular": "popularni", "latest": "nejnovejsi", "browse": "prochazet", "open": "otevrit", "read": "cist", "search": "hledat", "check": "zkontrolovat", "compare": "porovnat", "before ordering": "pred objednanim", "before shipping": "pred odeslanim", "international shipping": "mezinarodni doprava", "seller": "prodejce", "sellers": "prodejci", "order": "objednavka", "orders": "objednavky", "support": "podpora", "cost": "naklad", "price": "cena", "stock": "sklad", "size": "velikost", "color": "barva", "notes": "poznamky", "details": "detaily", "items": "polozky", "item": "polozka", "route": "trasa", "routes": "trasy", "workflow": "postup", "checklist": "seznam", "photos": "fotky", "photo": "fotka", "shipping": "doprava"
+    }
+  };
+
+  function localizedFallback(value, lang) {
+    if (lang === "en" || !value) return value || "";
+    const terms = LANGUAGE_TERM_MAP[lang];
+    if (!terms) return value || "";
+    let output = String(value);
+    Object.keys(terms)
+      .sort((a, b) => b.length - a.length)
+      .forEach((source) => {
+        output = output.replace(new RegExp(source.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"), terms[source]);
+      });
+    return output;
+  }
+
+  function localizedKey(key, lang) {
+    const english = I18N.en[key] || "";
+    if (lang === "en") return english;
+    if (I18N_NATIVE_KEYS[lang]?.has(key)) return I18N[lang][key] || english;
+    return localizedFallback(english, lang);
+  }
+
+  function shouldTranslateTextNode(node) {
+    const parent = node.parentElement;
+    if (!parent) return false;
+    if (!node.nodeValue.trim()) return false;
+    if (parent.closest("script, style, noscript, .lang-menu-panel")) return false;
+    if (parent.closest("[data-i18n], [data-i18n-html], [data-i18n-placeholder], [data-i18n-content], [data-i18n-aria], [data-i18n-count]")) return false;
+    return true;
+  }
+
+  function captureOriginalTextNodes() {
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach((node) => {
+      if (shouldTranslateTextNode(node) && !ORIGINAL_TEXT_NODES.has(node)) {
+        ORIGINAL_TEXT_NODES.set(node, node.nodeValue);
+      }
+    });
+  }
+
+  function translateLooseText(lang) {
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach((node) => {
+      if (!shouldTranslateTextNode(node)) return;
+      if (!ORIGINAL_TEXT_NODES.has(node)) ORIGINAL_TEXT_NODES.set(node, node.nodeValue);
+      const original = ORIGINAL_TEXT_NODES.get(node);
+      node.nodeValue = lang === "en" ? original : localizedFallback(original, lang);
+    });
+  }
+
+  function translateAttr(el, attr, lang) {
+    if (!el.hasAttribute(attr)) return;
+    if (!ORIGINAL_ATTRS.has(el)) ORIGINAL_ATTRS.set(el, {});
+    const attrs = ORIGINAL_ATTRS.get(el);
+    if (!(attr in attrs)) attrs[attr] = el.getAttribute(attr);
+    const original = attrs[attr] || "";
+    el.setAttribute(attr, lang === "en" ? original : localizedFallback(original, lang));
+  }
+
+  function translateLooseAttributes(lang) {
+    document.querySelectorAll("[aria-label], img[alt], input[placeholder], textarea[placeholder]").forEach((el) => {
+      if (el.dataset.i18nAria) return;
+      translateAttr(el, "aria-label", lang);
+      translateAttr(el, "alt", lang);
+      if (!el.dataset.i18nPlaceholder) translateAttr(el, "placeholder", lang);
+    });
+  }
+
+  function translatePageMeta(lang) {
+    document.title = lang === "en" ? ORIGINAL_TITLE : localizedFallback(ORIGINAL_TITLE, lang);
+    TRANSLATABLE_META_SELECTORS.forEach((selector) => {
+      const el = document.querySelector(selector);
+      if (!el || el.dataset.i18nContent) return;
+      translateAttr(el, "content", lang);
+    });
+  }
+
   function categoryLabel(slug) {
     const cat = (window.LITBUY_CATEGORIES || []).find((c) => c.slug === slug);
-    return t(`category.${slug}`) || (cat ? cat.name : slug);
+    return localizedKey(`category.${slug}`, currentLanguage) || (cat ? localizedFallback(cat.name, currentLanguage) : slug);
   }
 
   function categoryHref(cat) {
@@ -586,29 +840,33 @@
     return /^[a-z0-9-]+$/.test(token) ? token : fallback;
   }
 
+  function isAllowedRelativePath(value) {
+    if (!/^[a-z0-9._/-]+(?:[?#].*)?$/i.test(value)) return false;
+    return !value
+      .split(/[?#]/)[0]
+      .split("/")
+      .some((part) => !part || part === "." || part === ".." || part.startsWith("."));
+  }
+
   function safeUrl(value) {
-    const url = String(value || "");
-    if (/^(?:https?:\/\/|[a-z0-9._/-]+(?:[?#].*)?$)/i.test(url) && !/^(?:javascript|data):/i.test(url)) {
-      return url;
+    const url = String(value || "").trim();
+    if (!url || /^(?:javascript|data):/i.test(url) || url.startsWith("//")) return "#";
+    if (isAllowedRelativePath(url)) return url;
+
+    try {
+      const parsed = new URL(url);
+      if (parsed.protocol === "https:" && ALLOWED_EXTERNAL_URL_ORIGINS.has(parsed.origin)) {
+        return parsed.href;
+      }
+    } catch (e) {
+      return "#";
     }
     return "#";
   }
 
   function categoryImage(category) {
-    const images = {
-      shoes: "images/products/nike-air-jordan-3-sail-university-blue-sneakers-833aa8.webp",
-      hoodies: "images/products/moncler-single-white-logo-crewneck-sweatshirt-1b4c9e.webp",
-      "t-shirts": "images/products/moncler-logo-crewneck-sweatshirt-single-black-with-fire-cap-c4a5c2.webp",
-      jackets: "images/products/unisex-e54346.webp",
-      pants: "images/products/unisex-e54346.webp",
-      bags: "images/products/moncler-nfc-93f7de.webp",
-      headwear: "images/products/moncler-logo-crewneck-sweatshirt-single-black-with-fire-cap-c4a5c2.webp",
-      accessories: "images/products/nike-air-jordan-3-white-university-red-sneakers-92ad36.webp",
-      jersey: "images/products/unisex-e54346.webp",
-      electronics: "images/products/moncler-nfc-93f7de.webp",
-      other: "images/products/moncler-single-white-logo-crewneck-sweatshirt-1b4c9e.webp"
-    };
-    return images[category] || "";
+    const product = (window.LITBUY_PRODUCTS || []).find((item) => item.category === category && item.image);
+    return product ? product.image : "";
   }
 
   function productImageHtml(product, fallbackIcon) {
@@ -640,25 +898,85 @@
     catGrid.innerHTML = (window.LITBUY_CATEGORIES || []).map(categoryCardHtml).join("");
   }
 
+  function categoryProductCardItems() {
+    const used = new Set();
+    return (window.LITBUY_CATEGORIES || [])
+      .map((category) => {
+        const product = (window.LITBUY_PRODUCTS || []).find((item) => item.category === category.slug && !used.has(item.id));
+        if (!product) return null;
+        used.add(product.id);
+        return {
+          label: category.name,
+          name: product.name,
+          image: product.image,
+          url: product.url
+        };
+      })
+      .filter(Boolean);
+  }
+
+  function categoryProductCardHtml(item) {
+    const href = safeUrl(item.url);
+    const image = safeUrl(item.image);
+    const imageAlt = `${item.name} product preview`;
+    const description = localizedFallback("Open this exact StreetStyle product detail page before adding the item through LitBuy.", currentLanguage);
+    const productCta = localizedFallback("View Product", currentLanguage).toUpperCase();
+    const itemLabel = localizedFallback(item.label, currentLanguage);
+
+    return `
+      <a href="${escapeAttr(href)}" class="category-product-card maisonlooks-link"${externalTargetAttrs(href)} aria-label="${escapeAttr(localizedFallback(`Open ${item.name} on StreetStyle`, currentLanguage))}">
+        <span class="category-product-media">
+          ${image !== "#" ? `<img src="${escapeAttr(image)}" alt="${escapeAttr(imageAlt)}" loading="lazy" decoding="async" referrerpolicy="no-referrer">` : `<span class="category-product-media__fallback">${escapeHtml(item.name)}</span>`}
+        </span>
+        <span class="category-product-body">
+          <span class="category-product-kicker">${escapeHtml(itemLabel)}</span>
+          <span class="category-product-title">${escapeHtml(item.name)}</span>
+          <span class="category-product-desc">${escapeHtml(description)}</span>
+          <span class="category-product-count">${escapeHtml(productCta)}</span>
+        </span>
+      </a>`;
+  }
+
+  function bindCategoryProductImages(grid) {
+    grid.querySelectorAll(".category-product-media img").forEach((img) => {
+      img.addEventListener("error", () => {
+        const media = img.closest(".category-product-media");
+        if (!media) return;
+        media.innerHTML = `
+          <span class="category-product-media__fallback">
+            ${escapeHtml(img.alt.replace(" product preview", ""))}
+          </span>
+        `;
+      });
+    });
+  }
+
+  function renderCategoryProductGrid() {
+    const grid = document.getElementById("categoryProductGrid");
+    if (!grid) return;
+    grid.innerHTML = categoryProductCardItems().map(categoryProductCardHtml).join("");
+    bindCategoryProductImages(grid);
+  }
+
   function productCard(p) {
     const browseUrl = safeUrl(p.url || maisonlooksCategoryUrl(p.category, p.badge));
     const hasProductUrl = Boolean(p.url);
     const badgeToken = safeClassToken(p.badge, "");
     const badge = p.badge
-      ? `<span class="product-badge product-badge--${badgeToken}">${p.badge === "hot" ? "🔥 HOT" : "🔥 TRENDING"}</span>`
+      ? `<span class="product-badge product-badge--${badgeToken}">🔥 ${escapeHtml(localizedFallback(p.badge === "hot" ? "Hot" : "Trending", currentLanguage).toUpperCase())}</span>`
       : "";
     const icons = { shoes: "SH", hoodies: "HD", "t-shirts": "TS", jackets: "JK", pants: "PT", bags: "BG", headwear: "HW", accessories: "AC", jersey: "JR", electronics: "EL", other: "OT" };
     const icon = icons[p.category] || "LB";
     const browseKey = hasProductUrl ? "product.viewProduct" : p.badge === "hot" ? "product.browseHot" : p.badge === "trending" ? "product.browseTrending" : "product.browseCategory";
-    const browseLabel = t(browseKey) || (hasProductUrl ? "View Product" : p.badge === "hot" ? "Browse Hot Picks" : p.badge === "trending" ? "Browse Trending" : "Browse Category");
+    const browseLabel = localizedKey(browseKey, currentLanguage) || (hasProductUrl ? "View Product" : p.badge === "hot" ? "Browse Hot Picks" : p.badge === "trending" ? "Browse Trending" : "Browse Category");
     const category = categoryLabel(p.category);
     const productMeta = [p.brand, category].filter(Boolean).join(" / ");
-    const productDesc = p.desc || t("product.defaultDesc") || "Selected LitBuy route for shoppers who want a fast product preview before opening LitBuy.";
+    const productDesc = localizedFallback(p.desc || t("product.defaultDesc") || "Selected LitBuy route for shoppers who want a fast product preview before opening LitBuy.", currentLanguage);
     const primaryUrl = safeUrl(hasProductUrl ? browseUrl : buyUrl(p));
     const primaryKey = hasProductUrl ? "product.openProduct" : "product.buyOnLitBuy";
-    const primaryLabel = t(primaryKey) || (hasProductUrl ? "Open Product" : "Buy On LitBuy");
+    const primaryLabel = localizedKey(primaryKey, currentLanguage) || (hasProductUrl ? "Open Product" : "Buy On LitBuy");
     const price = p.price ? `<span class="product-price">$${escapeHtml(p.price)}</span>` : "";
-    const styleCount = p.styles ? `<span class="product-chip">${escapeHtml(p.styles)} styles</span>` : "";
+    const styleCount = p.styles ? `<span class="product-chip">${escapeHtml(localizedFallback(`${p.styles} styles`, currentLanguage))}</span>` : "";
 
     return `
       <article class="product-card">
@@ -698,8 +1016,36 @@
   }
 
   function productCountText(count) {
-    const template = t("finds.count") || "{count} products found";
+    const template = localizedKey("finds.count", currentLanguage) || "{count} products found";
     return template.replace("{count}", count);
+  }
+
+  function supportedLanguage(lang) {
+    return SUPPORTED_LANG_CODES.has(lang) ? lang : "en";
+  }
+
+  function pageFileName() {
+    const file = (window.location.pathname.split("/").pop() || "index.html").toLowerCase();
+    return file || "index.html";
+  }
+
+  function applyPageTranslations(lang) {
+    const pageHtml = PAGE_I18N[lang]?.[pageFileName()];
+    document.querySelectorAll(".content-page").forEach((content) => {
+      if (!ORIGINAL_PAGE_HTML.has(content)) {
+        ORIGINAL_PAGE_HTML.set(content, content.innerHTML);
+      }
+      content.innerHTML = pageHtml || ORIGINAL_PAGE_HTML.get(content);
+    });
+  }
+
+  function markCommonFooterKeys() {
+    document.querySelectorAll('a[href*="source-links.html"]').forEach((link) => {
+      if (!link.dataset.i18n) link.dataset.i18n = "footer.sourceLinks";
+    });
+    document.querySelectorAll('a[href*="shipping-checklist.html"]').forEach((link) => {
+      if (!link.dataset.i18n) link.dataset.i18n = "footer.shippingChecklist";
+    });
   }
 
   function preferredLanguage() {
@@ -709,9 +1055,10 @@
     } catch (e) {
       saved = "";
     }
-    if (saved && I18N[saved]) return saved;
+    if (saved && SUPPORTED_LANG_CODES.has(saved)) return saved;
+    if (saved && I18N[saved]) saveLanguage("en");
     const browserLang = (navigator.language || "en").slice(0, 2).toLowerCase();
-    return I18N[browserLang] ? browserLang : "en";
+    return SUPPORTED_LANG_CODES.has(browserLang) ? browserLang : "en";
   }
 
   function saveLanguage(lang) {
@@ -728,9 +1075,14 @@
       if (href.includes("index.html") && !href.includes("#faq")) link.dataset.i18n = "nav.home";
       if (href.includes("finds.html")) link.dataset.i18n = "nav.finds";
       if (href.includes("review.html")) link.dataset.i18n = "nav.resources";
+      if (href.includes("qc.html")) link.dataset.i18n = "nav.qc";
+      if (href.includes("blog.html")) link.dataset.i18n = "nav.blog";
+      if (href.includes("new.html")) link.dataset.i18n = "nav.new";
       if (href.includes("categories.html")) link.dataset.i18n = "nav.categories";
       if (href.includes("help.html")) link.dataset.i18n = "nav.help";
       if (href.includes("#faq")) link.dataset.i18n = "nav.faq";
+      if (href.includes("source-links.html")) link.dataset.i18n = "footer.sourceLinks";
+      if (href.includes("shipping-checklist.html")) link.dataset.i18n = "footer.shippingChecklist";
     });
   }
 
@@ -771,27 +1123,39 @@
   }
 
   function applyLanguage(lang) {
-    const messages = I18N[lang] || I18N.en;
-    currentLanguage = I18N[lang] ? lang : "en";
-    document.documentElement.lang = lang;
+    const nextLanguage = supportedLanguage(lang);
+    const messages = I18N[nextLanguage] || I18N.en;
+    currentLanguage = nextLanguage;
+    document.documentElement.lang = nextLanguage;
+    applyPageTranslations(nextLanguage);
+    captureOriginalTextNodes();
+    markCommonFooterKeys();
 
     document.querySelectorAll("[data-i18n]").forEach((el) => {
-      const value = messages[el.dataset.i18n] || I18N.en[el.dataset.i18n];
+      const value = I18N_NATIVE_KEYS[nextLanguage]?.has(el.dataset.i18n)
+        ? messages[el.dataset.i18n]
+        : localizedKey(el.dataset.i18n, nextLanguage);
       if (value) el.textContent = value;
     });
 
     document.querySelectorAll("[data-i18n-html]").forEach((el) => {
-      const value = messages[el.dataset.i18nHtml] || I18N.en[el.dataset.i18nHtml];
+      const value = I18N_NATIVE_KEYS[nextLanguage]?.has(el.dataset.i18nHtml)
+        ? messages[el.dataset.i18nHtml]
+        : localizedKey(el.dataset.i18nHtml, nextLanguage);
       if (value) el.innerHTML = value;
     });
 
     document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
-      const value = messages[el.dataset.i18nPlaceholder] || I18N.en[el.dataset.i18nPlaceholder];
+      const value = I18N_NATIVE_KEYS[nextLanguage]?.has(el.dataset.i18nPlaceholder)
+        ? messages[el.dataset.i18nPlaceholder]
+        : localizedKey(el.dataset.i18nPlaceholder, nextLanguage);
       if (value) el.setAttribute("placeholder", value);
     });
 
     document.querySelectorAll("[data-i18n-content]").forEach((el) => {
-      const value = messages[el.dataset.i18nContent] || I18N.en[el.dataset.i18nContent];
+      const value = I18N_NATIVE_KEYS[nextLanguage]?.has(el.dataset.i18nContent)
+        ? messages[el.dataset.i18nContent]
+        : localizedKey(el.dataset.i18nContent, nextLanguage);
       if (value) el.setAttribute("content", value);
     });
 
@@ -800,7 +1164,9 @@
     });
 
     document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
-      const value = messages[el.dataset.i18nAria] || I18N.en[el.dataset.i18nAria];
+      const value = I18N_NATIVE_KEYS[nextLanguage]?.has(el.dataset.i18nAria)
+        ? messages[el.dataset.i18nAria]
+        : localizedKey(el.dataset.i18nAria, nextLanguage);
       if (value) el.setAttribute("aria-label", value);
     });
 
@@ -820,7 +1186,10 @@
       });
     });
 
-    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    document.documentElement.dir = nextLanguage === "ar" ? "rtl" : "ltr";
+    translateLooseText(nextLanguage);
+    translateLooseAttributes(nextLanguage);
+    translatePageMeta(nextLanguage);
     refreshOpenFaqHeights();
   }
 
@@ -1059,6 +1428,7 @@
 
   function boot() {
     renderCategoryGrid();
+    renderCategoryProductGrid();
     initNav();
     initSearch();
     initFaq();

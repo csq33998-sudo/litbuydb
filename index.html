@@ -5,27 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="favicon.png" type="image/png">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <title>LitBuy Spreadsheet | Curated Finds & Shopping Guide</title>
-  <meta name="description" content="Browse the LitBuy Spreadsheet for curated LitBuy finds, product categories, shopping guides, reviews, and redirect links for Taobao, Weidian, and 1688 orders.">
-  <meta name="keywords" content="litbuy spreadsheet, litbuy finds, litbuy shopping guide, litbuy review, litbuy haul, taobao agent, weidian finds, 1688 finds">
+  <title>LitBuy Spreadsheet | Finds, QC Photos, Source Links & Shipping Checklist</title>
+  <meta name="description" content="Browse the LitBuy Spreadsheet for LitBuy finds, QC photos guidance, source links, product routes, and a shipping checklist for Taobao, Weidian, and 1688 orders.">
+  <meta name="keywords" content="litbuy spreadsheet, litbuy finds, QC photos, source links, shipping checklist, litbuy shopping guide, taobao source links, weidian finds, 1688 finds">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://litbuydb.com/">
   <meta property="og:url" content="https://litbuydb.com/">
   <meta property="og:site_name" content="LitBuy Spreadsheet">
   <meta property="og:image" content="https://litbuydb.com/favicon.png">
-  <meta property="og:title" content="LitBuy Spreadsheet | Curated Finds &amp; Shopping Guide">
-  <meta property="og:description" content="Browse the LitBuy Spreadsheet for curated LitBuy finds, product categories, shopping guides, reviews, and redirect links for Taobao, Weidian, and 1688 orders.">
+  <meta property="og:title" content="LitBuy Spreadsheet | Finds, QC Photos, Source Links &amp; Shipping Checklist">
+  <meta property="og:description" content="Browse the LitBuy Spreadsheet for LitBuy finds, QC photos guidance, source links, product routes, and a shipping checklist for Taobao, Weidian, and 1688 orders.">
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="LitBuy Spreadsheet | Curated Finds &amp; Shopping Guide">
-  <meta name="twitter:description" content="Browse curated LitBuy finds, category routes, shopping guides, reviews, and redirect links for Taobao, Weidian, and 1688 orders.">
+  <meta name="twitter:title" content="LitBuy Spreadsheet | Finds, QC Photos, Source Links &amp; Shipping Checklist">
+  <meta name="twitter:description" content="Browse LitBuy finds, source links, QC photos guidance, category routes, and shipping checklist steps for Taobao, Weidian, and 1688 orders.">
   <meta name="twitter:image" content="https://litbuydb.com/favicon.png">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    "name": "LitBuy Spreadsheet - Curated Finds and Shopping Guide",
+    "name": "LitBuy Spreadsheet - Finds, QC Photos, Source Links and Shipping Checklist",
     "url": "https://litbuydb.com/",
-    "description": "Independent LitBuy Spreadsheet resource with curated LitBuy finds, product categories, shopping guides, reviews, and redirect links for Taobao, Weidian, and 1688 orders."
+    "description": "Independent LitBuy Spreadsheet resource with LitBuy finds, QC photos guidance, source links, product routes, and shipping checklist steps for Taobao, Weidian, and 1688 orders."
   }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -94,6 +94,9 @@
         <a href="index.html" class="active link-home" data-i18n="nav.home">Home</a>
         <a href="finds.html" data-i18n="nav.finds">Finds</a>
         <a href="review.html" data-i18n="nav.resources">Resources</a>
+        <a href="qc.html">QC</a>
+        <a href="blog.html">Blog</a>
+        <a href="new.html">New</a>
         <a href="categories.html" data-i18n="nav.categories">Categories</a>
         <a href="help.html">Help</a>
         <a href="#faq" data-i18n="nav.faq">FAQ</a>
@@ -104,8 +107,8 @@
   <section class="hero">
     <div class="container">
       <span class="hero-label" data-i18n="home.heroLabel">Independent LitBuy Guide</span>
-      <h1 data-i18n="home.heroTitle">Discover Curated LitBuy Picks</h1>
-      <p class="hero-desc" data-i18n="home.heroDesc">A simple, fast, and efficient LitBuy spreadsheet resource &mdash; for finds, shopping lists, search, and category sorting, so you can browse faster and place orders through LitBuy with one click.</p>
+      <h1 data-i18n="home.heroTitle">LitBuy Spreadsheet for Finds, QC Photos and Source Links</h1>
+      <p class="hero-desc" data-i18n="home.heroDesc">A simple LitBuy spreadsheet resource for finds, source links, QC photo checks, shopping lists, and shipping checklist steps before you place an order through LitBuy.</p>
 
       <div class="hero-stats">
         <div class="hero-stat">
@@ -141,6 +144,17 @@
       <p class="section-label" data-i18n="home.categoriesLabel">Categories</p>
       <h2 class="section-title" data-i18n="home.categoriesTitle">Browse LitBuy Finds Categories</h2>
       <div class="category-grid" id="categoryGrid"></div>
+      <div class="category-product-panel">
+        <div class="section-heading-row">
+          <div>
+            <p class="section-label" data-i18n="home.categoryProductsLabel">StreetStyle product routes</p>
+            <h2 class="section-title" data-i18n="home.categoryProductsTitle">Open a product card, then view the exact item.</h2>
+            <p class="section-subtitle" data-i18n="home.categoryProductsSubtitle">Each card links to the matching StreetStyle product detail page, not a broad category page.</p>
+          </div>
+          <a href="categories.html" class="btn btn-secondary" data-i18n="home.viewAllCategories">View all categories</a>
+        </div>
+        <div class="category-product-grid" id="categoryProductGrid"></div>
+      </div>
     </div>
   </section>
 
@@ -157,8 +171,8 @@
         </article>
         <article class="step-card">
           <span class="step-number">02</span>
-          <h3 data-i18n="home.startStep2Title">Open a Product Link</h3>
-          <p data-i18n="home.startStep2Body">Compare product names, categories, and route pages before opening the LitBuy or MaisonLooks ordering page.</p>
+          <h3 data-i18n="home.startStep2Title">Open Source Links</h3>
+          <p data-i18n="home.startStep2Body">Compare source links, product names, categories, seller notes, and live listing details before opening the LitBuy ordering page.</p>
         </article>
         <article class="step-card">
           <span class="step-number">03</span>
@@ -167,8 +181,8 @@
         </article>
         <article class="step-card">
           <span class="step-number">04</span>
-          <h3 data-i18n="home.startStep4Title">Check QC Photos</h3>
-          <p data-i18n="home.startStep4Body">Review warehouse photos, confirm sizing and quality, then choose a shipping line for your haul.</p>
+          <h3 data-i18n="home.startStep4Title">Check QC Photos and Shipping</h3>
+          <p data-i18n="home.startStep4Body">Review warehouse photos, confirm sizing and quality, then use a shipping checklist before choosing a line for your haul.</p>
         </article>
       </div>
     </div>
@@ -219,6 +233,31 @@
           <h3>LitBuy Review</h3>
           <span data-i18n="home.openResource">Open resource &rarr;</span>
         </a>
+        <a href="qc.html" class="resource-card">
+          <div class="resource-card-icon">&#128269;</div>
+          <h3>LitBuy QC</h3>
+          <span data-i18n="home.openResource">Open resource &rarr;</span>
+        </a>
+        <a href="source-links.html" class="resource-card">
+          <div class="resource-card-icon">&#128279;</div>
+          <h3>LitBuy Source Links</h3>
+          <span data-i18n="home.openResource">Open resource &rarr;</span>
+        </a>
+        <a href="shipping-checklist.html" class="resource-card">
+          <div class="resource-card-icon">&#9989;</div>
+          <h3>Shipping Checklist</h3>
+          <span data-i18n="home.openResource">Open resource &rarr;</span>
+        </a>
+        <a href="blog.html" class="resource-card">
+          <div class="resource-card-icon">&#128196;</div>
+          <h3>LitBuy Blog</h3>
+          <span data-i18n="home.openResource">Open resource &rarr;</span>
+        </a>
+        <a href="new.html" class="resource-card">
+          <div class="resource-card-icon">&#10024;</div>
+          <h3>LitBuy New</h3>
+          <span data-i18n="home.openResource">Open resource &rarr;</span>
+        </a>
         <a href="haul.html" class="resource-card">
           <div class="resource-card-icon">&#128248;</div>
           <h3>LitBuy Haul</h3>
@@ -256,17 +295,17 @@
           <p data-i18n="home.latestCard2Body">Use spreadsheet routes to organize shoes, hoodies, jackets, accessories, and other finds before shipping.</p>
           <span class="guide-card-link" data-i18n="home.latestCard2Link">Read guide &rarr;</span>
         </a>
-        <a href="finds.html" class="guide-card">
-          <span class="guide-card-kicker" data-i18n="home.latestCard3Kicker">Finds Guide</span>
-          <h3 data-i18n="home.latestCard3Title">Best categories to browse first</h3>
-          <p data-i18n="home.latestCard3Body">Start with high-demand routes like shoes, streetwear, bags, accessories, and budget-friendly basics.</p>
-          <span class="guide-card-link" data-i18n="home.latestCard3Link">Open finds &rarr;</span>
+        <a href="qc.html" class="guide-card">
+          <span class="guide-card-kicker" data-i18n="home.latestCard3Kicker">QC Guide</span>
+          <h3 data-i18n="home.latestCard3Title">How to check LitBuy QC photos</h3>
+          <p data-i18n="home.latestCard3Body">Use warehouse photos to confirm color, sizing details, visible defects, packaging, and shipping risks before submitting a parcel.</p>
+          <span class="guide-card-link" data-i18n="home.latestCard3Link">Open QC guide &rarr;</span>
         </a>
-        <a href="alternatives.html" class="guide-card">
-          <span class="guide-card-kicker" data-i18n="home.latestCard4Kicker">Compare Guide</span>
-          <h3 data-i18n="home.latestCard4Title">LitBuy alternatives and agent comparison</h3>
-          <p data-i18n="home.latestCard4Body">Compare LitBuy with other shopping agents before choosing where to order and ship your items.</p>
-          <span class="guide-card-link" data-i18n="home.latestCard4Link">Compare agents &rarr;</span>
+        <a href="shipping-checklist.html" class="guide-card">
+          <span class="guide-card-kicker" data-i18n="home.latestCard4Kicker">Shipping Checklist</span>
+          <h3 data-i18n="home.latestCard4Title">Check a LitBuy haul before shipping</h3>
+          <p data-i18n="home.latestCard4Body">Review QC photos, source links, restrictions, parcel weight, packaging, address details, and tracking steps before paying freight.</p>
+          <span class="guide-card-link" data-i18n="home.latestCard4Link">Open checklist &rarr;</span>
         </a>
       </div>
     </div>
@@ -295,7 +334,7 @@
           <p class="section-label" data-i18n="home.aboutSpreadsheetLabel">About Our Spreadsheet</p>
           <h2 data-i18n="home.aboutSpreadsheetTitle">Why this LitBuy Spreadsheet is built for product discovery</h2>
           <p data-i18n="home.seoBody1">The LitBuy Spreadsheet is designed as a practical shopping index for international buyers who want to discover product ideas before placing an order. Instead of searching through scattered posts, old seller links, or disconnected marketplace pages, shoppers can start with organized categories, brand routes, and curated finds.</p>
-          <p data-i18n="home.seoBody2">Each section is written around the way people actually search: LitBuy finds, product spreadsheets, shopping agent reviews, hauls, QC photos, Taobao links, Weidian links, 1688 routes, and category-specific items like shoes, hoodies, jackets, bags, and accessories.</p>
+          <p data-i18n="home.seoBody2">Each section is written around the way people actually search: LitBuy finds, product spreadsheets, source links, shopping agent reviews, hauls, QC photos, Taobao links, Weidian links, 1688 routes, shipping checklist steps, and category-specific items like shoes, hoodies, jackets, bags, and accessories.</p>
           <p data-i18n="home.seoBody3">This site is independent and informational. Product checkout, QC review, warehouse storage, and international shipping are handled through LitBuy.com or the linked shopping pages. Our role is to make discovery faster and give each shopper a clearer path from keyword search to order preparation.</p>
         </div>
         <aside class="seo-panel-aside">
@@ -304,7 +343,7 @@
             <li data-i18n="home.browse1">Curated LitBuy finds and category routes</li>
             <li data-i18n="home.browse2">Spreadsheet-style product shortcuts</li>
             <li data-i18n="home.browse3">Shopping guide and review content</li>
-            <li data-i18n="home.browse4">Haul planning and QC-focused tips</li>
+            <li data-i18n="home.browse4">Haul planning, QC-focused tips, and shipping checklist steps</li>
             <li data-i18n="home.browse5">Agent comparison and alternative pages</li>
           </ul>
         </aside>
@@ -478,6 +517,7 @@
           <div class="footer-link-group">
             <h3 data-i18n="footer.guides">Guides</h3>
             <a href="review.html" data-i18n="footer.review">LitBuy Review</a>
+            <a href="qc.html" data-i18n="footer.qc">LitBuy QC</a><a href="blog.html" data-i18n="footer.blog">LitBuy Blog</a><a href="new.html" data-i18n="footer.new">LitBuy New</a>
             <a href="haul.html" data-i18n="footer.haul">Haul Guide</a>
             <a href="alternatives.html" data-i18n="footer.alternatives">Alternatives</a>
             <a href="help.html" data-i18n="footer.help">Help</a>
@@ -499,6 +539,6 @@
 
   <script src="js/config.js"></script>
   <script src="js/products.js?v=20260611"></script>
-  <script src="js/main.js?v=20260611"></script>
+  <script src="js/main.js?v=20260720"></script>
 </body>
 </html>

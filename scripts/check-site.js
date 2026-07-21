@@ -17,9 +17,56 @@ const TEXT_FILES = [
 ].filter((file) => fs.existsSync(path.join(ROOT, file)));
 
 const errors = [];
+const warnings = [];
+const PRODUCT_URL_ORIGIN = "https://streetstyle.maisonlooks.com";
+const PRODUCT_IMAGE_ORIGIN = "https://cdn.maisonlooks.com/products/";
+const ALLOWED_EXTERNAL_ORIGINS = new Set([
+  "https://litbuydb.com",
+  "https://litbuy.com",
+  "https://streetstyle.maisonlooks.com",
+  "https://cdn.maisonlooks.com",
+  "https://fonts.googleapis.com",
+  "https://fonts.gstatic.com",
+]);
+const ALLOWED_HTML_I18N_KEYS = new Set([
+  "about.body2",
+  "alternatives.why",
+  "haul.item1",
+  "haul.item2",
+  "haul.item3",
+  "haul.cta",
+  "help.a4",
+  "review.step1",
+  "review.step2",
+  "review.step3",
+  "review.step4",
+  "review.step5",
+  "review.verdictBody2",
+]);
 
 function read(file) {
   return fs.readFileSync(path.join(ROOT, file), "utf8");
+}
+
+function parseUrl(value) {
+  try {
+    return new URL(value);
+  } catch {
+    return null;
+  }
+}
+
+function isAllowedExternalUrl(value) {
+  const url = parseUrl(value);
+  return Boolean(url && url.protocol === "https:" && ALLOWED_EXTERNAL_ORIGINS.has(url.origin));
+}
+
+function hasSafeBlankRel(attrs) {
+  const target = attrs.match(/\btarget=["']([^"']+)["']/i)?.[1] || "";
+  if (target.toLowerCase() !== "_blank") return true;
+  const rel = attrs.match(/\brel=["']([^"']+)["']/i)?.[1] || "";
+  const tokens = new Set(rel.toLowerCase().split(/\s+/).filter(Boolean));
+  return tokens.has("noopener") && tokens.has("noreferrer");
 }
 
 for (const file of JS_FILES) {
@@ -37,8 +84,20 @@ for (const product of dataSandbox.window.LITBUY_PRODUCTS || []) {
     errors.push(`js/products.js: product ${product.id || product.name} is missing an image`);
     continue;
   }
-  if (!fs.existsSync(path.join(ROOT, product.image))) {
+  if (product.image.startsWith("http")) {
+    const imageUrl = parseUrl(product.image);
+    if (!imageUrl || !product.image.startsWith(PRODUCT_IMAGE_ORIGIN)) {
+      errors.push(`js/products.js: product ${product.id || product.name} image must come from ${PRODUCT_IMAGE_ORIGIN}`);
+    }
+  } else if (!fs.existsSync(path.join(ROOT, product.image))) {
     errors.push(`js/products.js: missing product image ${product.image}`);
+  }
+  const productUrl = parseUrl(product.url || "");
+  if (!productUrl || productUrl.origin !== PRODUCT_URL_ORIGIN || !productUrl.pathname.startsWith("/en/p/")) {
+    errors.push(`js/products.js: product ${product.id || product.name} must link to a StreetStyle product detail page`);
+  }
+  if (!product.name || !product.desc || !product.brand || !product.category) {
+    errors.push(`js/products.js: product ${product.id || product.url} is missing required product information`);
   }
 }
 
@@ -63,19 +122,48 @@ for (const file of HTML_FILES) {
   const refs = html.matchAll(/\b(?:href|src)=["']([^"']+)["']/g);
   for (const match of refs) {
     const value = match[1];
-    if (/^(?:https?:|mailto:|tel:|#|data:)/i.test(value)) continue;
+    if (/^https?:/i.test(value)) {
+      if (!isAllowedExternalUrl(value)) {
+        errors.push(`${file}: external reference is not allowlisted: ${value}`);
+      }
+      continue;
+    }
+    if (/^(?:mailto:|tel:|#|data:)/i.test(value)) continue;
     const localPath = value.split(/[?#]/)[0];
     if (!localPath) continue;
     if (!fs.existsSync(path.join(ROOT, localPath))) {
       errors.push(`${file}: missing local reference ${value}`);
     }
   }
+
+  const anchors = html.matchAll(/<a\b([^>]*?)>/gi);
+  for (const match of anchors) {
+    if (!hasSafeBlankRel(match[1])) {
+      errors.push(`${file}: target="_blank" link is missing rel="noopener noreferrer"`);
+    }
+  }
+
+  const htmlI18nAttrs = html.matchAll(/\bdata-i18n-html=["']([^"']+)["']/g);
+  for (const match of htmlI18nAttrs) {
+    if (!ALLOWED_HTML_I18N_KEYS.has(match[1])) {
+      errors.push(`${file}: data-i18n-html key is not allowlisted: ${match[1]}`);
+    }
+  }
 }
 
 const vercelConfig = JSON.parse(read("vercel.json"));
 const headers = (vercelConfig.headers || []).flatMap((entry) => entry.headers || []);
-if (!headers.some((header) => header.key.toLowerCase() === "content-security-policy")) {
+const csp = headers.find((header) => header.key.toLowerCase() === "content-security-policy")?.value || "";
+if (!csp) {
   errors.push("vercel.json: missing Content-Security-Policy header");
+}
+for (const directive of ["default-src 'self'", "frame-ancestors 'none'", "base-uri 'self'", "object-src 'none'"]) {
+  if (csp && !csp.includes(directive)) {
+    errors.push(`vercel.json: Content-Security-Policy is missing ${directive}`);
+  }
+}
+if (csp.includes("'unsafe-inline'")) {
+  warnings.push("vercel.json: Content-Security-Policy still uses 'unsafe-inline'; remove inline scripts/styles before making this an error.");
 }
 
 if (errors.length) {
@@ -83,4 +171,7 @@ if (errors.length) {
   process.exit(1);
 }
 
+if (warnings.length) {
+  console.warn(warnings.join("\n"));
+}
 console.log(`Site checks passed for ${HTML_FILES.length} HTML files and ${JS_FILES.length} JS files.`);

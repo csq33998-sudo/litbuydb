@@ -3,6 +3,7 @@ const fs = require("fs");
 const path = require("path");
 
 const PORT = Number(process.env.PORT) || 3002;
+const HOST = process.env.HOST || "127.0.0.1";
 const ROOT = __dirname;
 
 const types = {
@@ -14,6 +15,14 @@ const types = {
   ".jpeg": "image/jpeg",
   ".svg": "image/svg+xml",
   ".webp": "image/webp",
+};
+
+const securityHeaders = {
+  "Strict-Transport-Security": "max-age=31536000",
+  "X-Content-Type-Options": "nosniff",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "Content-Security-Policy":
+    "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https://streetstyle.maisonlooks.com https://cdn.maisonlooks.com data:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'; upgrade-insecure-requests",
 };
 
 function isPublicFile(relative) {
@@ -57,10 +66,11 @@ http
       }
       res.writeHead(200, {
         "Content-Type": types[path.extname(file).toLowerCase()] || "application/octet-stream",
+        ...securityHeaders,
       });
       res.end(data);
     });
   })
-  .listen(PORT, () => {
-    console.log(`LitBuy site running at http://localhost:${PORT}`);
+  .listen(PORT, HOST, () => {
+    console.log(`LitBuy site running at http://${HOST}:${PORT}`);
   });
